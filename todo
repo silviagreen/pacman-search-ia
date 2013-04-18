@@ -1,0 +1,4 @@
+Metodi da modificare:
+
+- searchAgents.getSuccessors
+- creare search.genericSearch

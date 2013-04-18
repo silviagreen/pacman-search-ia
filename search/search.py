@@ -66,7 +66,17 @@ def tinyMazeSearch(problem):
   s = Directions.SOUTH
   w = Directions.WEST
   return  [s,s,w,s,w,w,s,w]
-
+"""
+def genericSearch(problem, frontiera):
+  frontiera.push(problem.getStartState())
+  exploredStates = set([])
+  end = False
+  for :
+    if frontiera.isEmpty():
+      end = True
+    #
+    exploredStates
+""" 
 def depthFirstSearch(problem):
   """
   Search the deepest nodes in the search tree first [p 85].
@@ -82,6 +92,8 @@ def depthFirstSearch(problem):
   print "Start's successors:", problem.getSuccessors(problem.getStartState())
   """
   "*** YOUR CODE HERE ***"
+  #frontiera = util.Stack()
+  #return genericSearch(problem, frontiera)
   util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
