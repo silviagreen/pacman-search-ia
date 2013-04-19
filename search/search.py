@@ -69,11 +69,18 @@ def tinyMazeSearch(problem):
   maze, the sequence of moves will be incorrect, so only use this for tinyMaze
   """
   return  [s,s,w,s,w,w,n,s,w]
+  
+def nullHeuristic(state, problem=None):
+  """
+  A heuristic function estimates the cost from the current state to the nearest
+  goal in the provided SearchProblem.  This heuristic is trivial.
+  """
+  return 0
 
-def genericSearch(problem, frontiera):
+def genericSearch(problem, frontiera, euristica=nullHeuristic):
   esplorati = set()
   
-  frontiera.push((problem.getStartState(), [] , 0))
+  frontiera.push((problem.getStartState(), [] , 0), 0)
   
   while(not(frontiera.isEmpty())):
     	
@@ -84,6 +91,7 @@ def genericSearch(problem, frontiera):
 	 
     if problem.isGoalState(stato):
       print 'len actions: ' + str(len(azioni))
+      print 'cost actions: ' + str(costo)
       return azioni #soluzione corrispondente
     
     esplorati.add(stato)
@@ -99,9 +107,9 @@ def genericSearch(problem, frontiera):
 	  nuovaAzione = azioni + [azioneSucessore]
 	  
 	  #TODO: sistemare costo con euristica
-	  nuovoCosto = costo + costoSucessore
+	  nuovoCosto = costo + costoSucessore #g(n)
 	  
-	  frontiera.push((statoSucessore, nuovaAzione, nuovoCosto))
+	  frontiera.push((statoSucessore, nuovaAzione, nuovoCosto), nuovoCosto+euristica(statoSucessore, problem))
   return None
 
 def depthFirstSearch(problem):
@@ -136,19 +144,17 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
   "Search the node of least total cost first. "
   "*** YOUR CODE HERE ***"
-  util.raiseNotDefined()
-
-def nullHeuristic(state, problem=None):
-  """
-  A heuristic function estimates the cost from the current state to the nearest
-  goal in the provided SearchProblem.  This heuristic is trivial.
-  """
-  return 0
+  frontiera = util.PriorityQueue()
+  return genericSearch(problem, frontiera)
+  
+  #util.raiseNotDefined()
 
 def aStarSearch(problem, heuristic=nullHeuristic):
   "Search the node that has the lowest combined cost and heuristic first."
   "*** YOUR CODE HERE ***"
-  util.raiseNotDefined()
+  frontiera = util.PriorityQueueWithFunction(heuristic)
+  return genericSearch(problem, frontiera)
+  #util.raiseNotDefined()
 
 
 # Abbreviations

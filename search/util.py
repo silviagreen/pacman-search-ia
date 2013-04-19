@@ -20,7 +20,7 @@ class Stack:
   def __init__(self):
     self.list = []
     
-  def push(self,item):
+  def push(self,item,dummy):
     "Push 'item' onto the stack"
     self.list.append(item)
 
@@ -37,7 +37,7 @@ class Queue:
   def __init__(self):
     self.list = []
   
-  def push(self,item):
+  def push(self,item,dummy):
     "Enqueue the 'item' into the queue"
     self.list.insert(0,item)
 
@@ -89,9 +89,9 @@ class PriorityQueueWithFunction(PriorityQueue):
     self.priorityFunction = priorityFunction      # store the priority function
     PriorityQueue.__init__(self)        # super-class initializer
     
-  def push(self, item):
+  def push(self, item, dummy):
     "Adds an item to the queue with priority from the priority function"
-    PriorityQueue.push(self, item, self.priorityFunction(item))
+    PriorityQueue.push(self, item, self.priorityFunction(item)) #guardare perche A* e diverso da UCS
 
     
 def manhattanDistance( xy1, xy2 ):
