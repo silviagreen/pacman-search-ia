@@ -90,8 +90,8 @@ def genericSearch(problem, frontiera, euristica=nullHeuristic):
 
 	 
     if problem.isGoalState(stato):
-      print 'len actions: ' + str(len(azioni))
-      print 'cost actions: ' + str(costo)
+      #print 'len actions: ' + str(len(azioni))
+      #print 'cost actions: ' + str(costo)
       return azioni #soluzione corrispondente
     
     esplorati.add(stato)
@@ -152,8 +152,9 @@ def uniformCostSearch(problem):
 def aStarSearch(problem, heuristic=nullHeuristic):
   "Search the node that has the lowest combined cost and heuristic first."
   "*** YOUR CODE HERE ***"
-  frontiera = util.PriorityQueueWithFunction(heuristic)
-  return genericSearch(problem, frontiera)
+  #frontiera = util.PriorityQueueWithFunction(heuristic)
+  frontiera = util.PriorityQueue()
+  return genericSearch(problem, frontiera, heuristic)
   #util.raiseNotDefined()
 
 
