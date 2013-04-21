@@ -327,10 +327,12 @@ class CornersProblem(search.SearchProblem):
                  angoliVisitati += (prossimaPosizione, )
              
              prossimoStato = (prossimaPosizione, angoliVisitati)
+             #successors.append(  (prossimoStato , action, costoAzione)  )
              successors += [ (prossimoStato , action, costoAzione) ] 
                  
     "*** YOUR CODE HERE ***"
     self._expanded += 1
+    print 'nodes expanded: ' + str(self._expanded)
     return successors
 
   def getCostOfActions(self, actions):
