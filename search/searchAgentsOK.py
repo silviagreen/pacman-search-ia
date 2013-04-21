@@ -277,11 +277,10 @@ class CornersProblem(search.SearchProblem):
     self._expanded = 0 # Number of search nodes expanded
 
     "*** YOUR CODE HERE ***"
-    #self.statoIniziale = () #(posizioneAttuale, lista degli angoli visitati)
-    angoliVisitati = ()
+    self.statoIniziale = () #(posizioneAttuale, lista degli angoli visitati)
+    angoliVisitati = []
     if self.startingPosition in self.corners:
-        
-        angoliVisitati += (self.startingPosition, )
+        angoliVisitati.append(self.startingPosition)
     self.statoIniziale = (self.startingPosition, angoliVisitati)
         
        
@@ -317,19 +316,18 @@ class CornersProblem(search.SearchProblem):
       # Here's a code snippet for figuring out whether a new position hits a wall:
          x,y = state[0]
          dx, dy = Actions.directionToVector(action)
-         prossimaPosizione = nextx, nexty = int(x + dx), int(y + dy)
+         nextx, nexty = int(x + dx), int(y + dy)
          hitsWall = self.walls[nextx][nexty]
-         costoAzione = self.getCostOfActions( [action] )
+        
          if not hitsWall:
-            
-             angoliVisitati = state[1]
-             if prossimaPosizione in self.corners and prossimaPosizione not in angoliVisitati:
-                 angoliVisitati += (prossimaPosizione, )
-             
-             prossimoStato = (prossimaPosizione, angoliVisitati)
-             successors += [ (prossimoStato , action, costoAzione) ] 
+             prossimaPosizione = (nextx, nexty)
+             angoliVisitati = list(state[1])
+             if prossimaPosizione in self.corners:
+                 angoliVisitati.append(prossimaPosizione)
+                 costoAzione = self.getCostOfAction( [action] )
+                 successors.append( ( (prossimaPosizione, angoliVisitati), action, costoAzione) )
                  
-    "*** YOUR CODE HERE ***"
+                 "*** YOUR CODE HERE ***"
     self._expanded += 1
     return successors
 
