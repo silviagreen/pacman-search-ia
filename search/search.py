@@ -104,12 +104,9 @@ def genericSearch(problem, frontiera, euristica=nullHeuristic):
 	  #percorso che pacman fa per raggiungere lo stato corrente a partire dallo stato iniziale 
 	  #passando per tutti gli stati visitati per raggiungere lo stato corrente,
       #costo)
-	  nuovaAzione = azioni + [azioneSucessore]
-	  
-	  #TODO: sistemare costo con euristica
-	  nuovoCosto = costo + costoSucessore #g(n)
-	  
-	  frontiera.push((statoSucessore, nuovaAzione, nuovoCosto), nuovoCosto+euristica(statoSucessore, problem))
+        nuovaAzione = azioni + [azioneSucessore]
+        nuovoCosto = costo + costoSucessore #g(n)
+        frontiera.push((statoSucessore, nuovaAzione, nuovoCosto), nuovoCosto+euristica(statoSucessore, problem))
   return None
 
 def depthFirstSearch(problem):
