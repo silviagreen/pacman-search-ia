@@ -278,15 +278,13 @@ class CornersProblem(search.SearchProblem):
 
     "*** YOUR CODE HERE ***"
     #self.statoIniziale = () #(posizioneAttuale, lista degli angoli visitati)
+    self.costFn = lambda x: 1
     angoliVisitati = ()
     if self.startingPosition in self.corners:
-        
         angoliVisitati += (self.startingPosition, )
+        
     self.statoIniziale = (self.startingPosition, angoliVisitati)
         
-       
-   
-    
   def getStartState(self):
     "Returns the start state (in your state space, not the full Pacman state space)"
     "*** YOUR CODE HERE ***"
@@ -319,20 +317,22 @@ class CornersProblem(search.SearchProblem):
          dx, dy = Actions.directionToVector(action)
          prossimaPosizione = nextx, nexty = int(x + dx), int(y + dy)
          hitsWall = self.walls[nextx][nexty]
-         costoAzione = self.getCostOfActions( [action] )
+         
+         "*** YOUR CODE HERE ***"
          if not hitsWall:
-            
              angoliVisitati = state[1]
              if prossimaPosizione in self.corners and prossimaPosizione not in angoliVisitati:
                  angoliVisitati += (prossimaPosizione, )
              
              prossimoStato = (prossimaPosizione, angoliVisitati)
-             #successors.append(  (prossimoStato , action, costoAzione)  )
-             successors += [ (prossimoStato , action, costoAzione) ] 
+             costoAzione = self.costFn(prossimoStato) #self.getCostOfActions( [action] ) tolta perche' rallentava l'esecuzione
+             successors.append(  (prossimoStato , action, costoAzione)  )
+             #successors += [ (prossimoStato , action, costoAzione) ] 
                  
-    "*** YOUR CODE HERE ***"
+    
     self._expanded += 1
-    print 'nodes expanded: ' + str(self._expanded)
+    #print 'nodes expanded: ' + str(self._expanded)
+    #print successors
     return successors
 
   def getCostOfActions(self, actions):

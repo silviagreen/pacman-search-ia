@@ -15,12 +15,28 @@ import heapq, random
  Data structures useful for implementing SearchAgents
 """
 
-class Stack:
+class ListaAstratta:
+    def __init__(self):
+        raise NotImplementedError( "Should have implemented this" )
+    
+    def push(self,item,priority=1):
+        raise NotImplementedError( "Should have implemented this" )
+    
+    def pop(self):
+        raise NotImplementedError( "Should have implemented this" )
+    
+    def isEmpty(self):
+        raise NotImplementedError( "Should have implemented this" )
+    
+    def contains(self, item):
+        raise NotImplementedError( "Should have implemented this" )
+
+class Stack(ListaAstratta):
   "A container with a last-in-first-out (LIFO) queuing policy."
   def __init__(self):
     self.list = []
     
-  def push(self,item,dummy):
+  def push(self,item,priority):
     "Push 'item' onto the stack"
     self.list.append(item)
 
@@ -32,12 +48,18 @@ class Stack:
     "Returns true if the stack is empty"
     return len(self.list) == 0
 
-class Queue:
+  def contains(self, item):
+    for elem in self.list:
+        if elem[0] == item:
+            return True  
+    return False
+
+class Queue(ListaAstratta):
   "A container with a first-in-first-out (FIFO) queuing policy."
   def __init__(self):
     self.list = []
   
-  def push(self,item,dummy):
+  def push(self,item,priority):
     "Enqueue the 'item' into the queue"
     self.list.insert(0,item)
 
@@ -51,8 +73,14 @@ class Queue:
   def isEmpty(self):
     "Returns true if the queue is empty"
     return len(self.list) == 0
+
+  def contains(self, item):
+    for elem in self.list:
+        if elem[0] == item:
+            return True  
+    return False
   
-class PriorityQueue:
+class PriorityQueue(ListaAstratta):
   """
     Implements a priority queue data structure. Each inserted item
     has a priority associated with it and the client is usually interested
@@ -77,6 +105,9 @@ class PriorityQueue:
   def isEmpty(self):
     return len(self.heap) == 0
 
+  def contains(self, item):
+    return item in self.heap
+
 class PriorityQueueWithFunction(PriorityQueue):
   """
   Implements a priority queue with the same push/pop signature of the
@@ -89,7 +120,7 @@ class PriorityQueueWithFunction(PriorityQueue):
     self.priorityFunction = priorityFunction      # store the priority function
     PriorityQueue.__init__(self)        # super-class initializer
     
-  def push(self, item, dummy):
+  def push(self, item, priority):
     "Adds an item to the queue with priority from the priority function"
     PriorityQueue.push(self, item, self.priorityFunction(item)) #guardare perche A* e diverso da UCS
 

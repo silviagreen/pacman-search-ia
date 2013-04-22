@@ -98,12 +98,14 @@ def genericSearch(problem, frontiera, euristica=nullHeuristic):
    
     for statoSucessore, azioneSucessore, costoSucessore in problem.getSuccessors(stato):
     #per ogni successore dello stato corrente
-      if statoSucessore not in esplorati:
+      if statoSucessore not in esplorati and not frontiera.contains(statoSucessore):
 	  #non serve il controllo del nodo corrente nella frontiera perche 
 	  #nodo = (stato, 
 	  #percorso che pacman fa per raggiungere lo stato corrente a partire dallo stato iniziale 
 	  #passando per tutti gli stati visitati per raggiungere lo stato corrente,
       #costo)
+        #print statoSucessore
+        #print frontiera.list
         nuovaAzione = azioni + [azioneSucessore]
         nuovoCosto = costo + costoSucessore #g(n)
         frontiera.push((statoSucessore, nuovaAzione, nuovoCosto), nuovoCosto+euristica(statoSucessore, problem))
