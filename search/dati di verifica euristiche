@@ -10,15 +10,20 @@ ADDING MAZE LAYOUTS:
 
 QUESTION 1 (1 pt.)
 
-We will evaluate your DFS algorithm on the mediumMaze layout. The autograder rewards full credit if your path is in the set of acceptable paths and you expand no more than 270 nodes.
+We will evaluate your DFS algorithm on the mediumMaze layout. 
+The autograder rewards full credit if your path is in the set of acceptable paths and 
+you expand no more than 270 nodes.
 
 QUESTION 2 (1 pt.)
 
-We will evaluate your BFS algorithm on the mediumMaze layout. The autograder rewards full credit if your path is in the set of acceptable paths and you expand no more than 270 nodes.
+We will evaluate your BFS algorithm on the mediumMaze layout. 
+The autograder rewards full credit if your path is in the set of acceptable paths and 
+you expand no more than 270 nodes.
 
 QUESTION 3 (2 pts.)
 
-The autograder checks your Uniform Cost Search algorithm on several layouts and agents. For the following function calls, you must expand AT MOST the following number of nodes to receive credit:
+The autograder checks your Uniform Cost Search algorithm on several layouts and agents. 
+For the following function calls, you must expand AT MOST the following number of nodes to receive credit:
 
 Function Call																		Nodes Expanded
 ---------------------------------------------------------------------------------------------------
@@ -31,11 +36,14 @@ Full credit is awarded for successfully completing all 4 cases described above. 
 
 QUESTION 4 (3 pts.)
 
-We will evaluate your A* algorithm on the mediumMaze layout and manhattanHeuristic. The autograder rewards full credit if your path is in the set of acceptable paths and you expand no more than 243 nodes. The autograder does not give partial credit on this problem. However, the number of nodes already provides some leeway.
+We will evaluate your A* algorithm on the mediumMaze layout and manhattanHeuristic. 
+The autograder rewards full credit if your path is in the set of acceptable paths and
+you expand no more than 243 nodes. The autograder does not give partial credit on this problem. However, the number of nodes already provides some leeway.
 
 QUESTION 5 (2 pts.)
 
-The autograder evaluates Question 5 on the tinyCorners layout. You must produce the optimal path and visit all 4 corners to receive full credit. 
+The autograder evaluates Question 5 on the tinyCorners layout. 
+You must produce the optimal path and visit all 4 corners to receive full credit. 
 
 QUESTION 6 (3 pts.)
 
@@ -52,7 +60,8 @@ ct1 (given in extra_layouts.zip)	8
 ct2 (given in extra_layouts.zip)	8
 ct3 (given in extra_layouts.zip)	28
 
-Also, the autograder will try using your heuristic with A* and mediumCorners. If the cost is greater than 106, your heuristic may not be admissible.
+Also, the autograder will try using your heuristic with A* and mediumCorners. 
+If the cost is greater than 106, your heuristic may not be admissible.
 
 You get 1 point for having an admissible heuristic. Additionally, you get 1 point for expanding fewer than 1600 nodes on mediumCorners, and another point if it is fewer than 1200 nodes.
 
