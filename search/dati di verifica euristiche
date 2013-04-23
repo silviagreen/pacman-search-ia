@@ -1,0 +1,86 @@
+The following document specifies exactly how each question in Project 1 will be graded. This document also describes how to add the extra maze layouts so that you can test your code with them.
+
+ADDING MAZE LAYOUTS:
+1. Unzip extra_layouts.zip.
+2. Select all .lay files in the unzipped extra_layouts folder.
+3. Copy these files to the layouts folder in your Project 1 (search) folder.
+4. These layouts should now be usable. Simply include the filename of the layout in place of another maze name (such as mediumMaze).
+	Example: python pacman.py -l ct1 -p SearchAgent
+	This example uses the ct1 layout, included in the extra layouts.
+
+QUESTION 1 (1 pt.)
+
+We will evaluate your DFS algorithm on the mediumMaze layout. The autograder rewards full credit if your path is in the set of acceptable paths and you expand no more than 270 nodes.
+
+QUESTION 2 (1 pt.)
+
+We will evaluate your BFS algorithm on the mediumMaze layout. The autograder rewards full credit if your path is in the set of acceptable paths and you expand no more than 270 nodes.
+
+QUESTION 3 (2 pts.)
+
+The autograder checks your Uniform Cost Search algorithm on several layouts and agents. For the following function calls, you must expand AT MOST the following number of nodes to receive credit:
+
+Function Call																		Nodes Expanded
+---------------------------------------------------------------------------------------------------
+python pacman.py -l mediumMaze -p SearchAgent -a fn=ucs								295
+python pacman.py -l mediumMaze -p StayEastSearchAgent								286
+python pacman.py -l mediumMaze -p StayWestSearchAgent								190
+python pacman.py -l testSearch -p SearchAgent -a prob=FoodSearchProblem,fn=ucs		28
+
+Full credit is awarded for successfully completing all 4 cases described above. Partial credit will be awarded for completing at least 2 of these successfully.
+
+QUESTION 4 (3 pts.)
+
+We will evaluate your A* algorithm on the mediumMaze layout and manhattanHeuristic. The autograder rewards full credit if your path is in the set of acceptable paths and you expand no more than 243 nodes. The autograder does not give partial credit on this problem. However, the number of nodes already provides some leeway.
+
+QUESTION 5 (2 pts.)
+
+The autograder evaluates Question 5 on the tinyCorners layout. You must produce the optimal path and visit all 4 corners to receive full credit. 
+
+QUESTION 6 (3 pts.)
+
+The autograder evaluates Question 6 for admissibility and number of nodes expanded.
+
+First, no points are awarded if the heuristic is not admissible, no matter how many nodes are expanded. The autograder will check admissibility on four different layouts, one of which was already included, and we are releasing the other 3 now.
+
+Your heuristic is NOT admissible if your path found has a cost GREATER THAN the given value for the following layouts:
+
+Layout								Cost
+--------------------------------------------
+mediumCorners (included)			106
+ct1 (given in extra_layouts.zip)	8
+ct2 (given in extra_layouts.zip)	8
+ct3 (given in extra_layouts.zip)	28
+
+Also, the autograder will try using your heuristic with A* and mediumCorners. If the cost is greater than 106, your heuristic may not be admissible.
+
+You get 1 point for having an admissible heuristic. Additionally, you get 1 point for expanding fewer than 1600 nodes on mediumCorners, and another point if it is fewer than 1200 nodes.
+
+QUESTION 7 (5 pts.)
+
+The autograder evaluates Question 7 for admissibility, number of nodes expanded, and consistency.
+
+First, no points are awarded if the heuristic is not admissible, no matter how many nodes are expanded. Your heuristic is NOT admissible if your path found has a cost GREATER THAN the given value for the following layouts (all included in extra_layouts.zip, except trickySearch which you already have):
+
+Layout			Cost
+------------------------
+trickySearch	60
+q7_1			8
+q7_2			7
+q7_3			6
+q7_4			5
+q7_5			7
+q7_6			5
+q7_7			11
+q7_8			1
+q7_9			5
+q7_10			31
+q7_11			21
+q7_12			16
+q7_13			7
+
+Also, the autograder will try using your heuristic with A* and trickySearch. If the cost is greater than 60, your heuristic may not be admissible.
+
+The chart included with Question 7 in the handout describes how many points you'll receive if your heuristic is admissible, depending on how many nodes you expand.
+
+The autograder evaluates your heuristic for consistency based on the definition of consistency (see Question 7 for the definition). That is, for each state your program visits, the autograder will evaluate your heuristic in each successor state to make sure that the cost has not decreased too much.
