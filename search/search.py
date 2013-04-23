@@ -78,37 +78,25 @@ def nullHeuristic(state, problem=None):
   return 0
 
 def genericSearch(problem, frontiera, euristica=nullHeuristic):
-  esplorati = set()
-  
+  esplorati = []
   frontiera.push((problem.getStartState(), [] , 0), 0)
   
   while(not(frontiera.isEmpty())):
-    	
     stato, azioni, costo = frontiera.pop()
-	
-    #print str(stato) + '->' + str(azioni)
-
-	 
+    
     if problem.isGoalState(stato):
-      #print 'len actions: ' + str(len(azioni))
-      #print 'cost actions: ' + str(costo)
       return azioni #soluzione corrispondente
     
-    esplorati.add(stato)
-   
-    for statoSucessore, azioneSucessore, costoSucessore in problem.getSuccessors(stato):
-    #per ogni successore dello stato corrente
-      if statoSucessore not in esplorati and not frontiera.contains(statoSucessore):
-	  #non serve il controllo del nodo corrente nella frontiera perche 
-	  #nodo = (stato, 
-	  #percorso che pacman fa per raggiungere lo stato corrente a partire dallo stato iniziale 
-	  #passando per tutti gli stati visitati per raggiungere lo stato corrente,
-      #costo)
-        #print statoSucessore
-        #print frontiera.list
-        nuovaAzione = azioni + [azioneSucessore]
-        nuovoCosto = costo + costoSucessore #g(n)
-        frontiera.push((statoSucessore, nuovaAzione, nuovoCosto), nuovoCosto+euristica(statoSucessore, problem))
+    esplorati.append(stato)
+    successori = problem.getSuccessors(stato)
+    
+    for statoSuccessore, azioneSuccessore, costoSuccessore in successori:
+      nuovaAzione = azioni + [azioneSuccessore]
+      nuovoCosto = costo + costoSuccessore #g(n)
+      nodoSuccessore = (statoSuccessore, nuovaAzione, nuovoCosto)
+      if statoSuccessore not in esplorati and not frontiera.contains(statoSuccessore, nuovoCosto):
+        frontiera.push(nodoSuccessore, nuovoCosto + euristica(statoSuccessore, problem))
+        
   return None
 
 def depthFirstSearch(problem):
@@ -128,25 +116,18 @@ def depthFirstSearch(problem):
   "*** YOUR CODE HERE ***"
   frontiera = util.Stack()
   return genericSearch(problem, frontiera)
-  #util.raiseNotDefined()
- 
 
 def breadthFirstSearch(problem):
   "Search the shallowest nodes in the search tree first. [p 81]"
-  "*** YOUR CODE HERE ***"
-  
+  "*** YOUR CODE HERE ***" 
   frontiera = util.Queue()
   return genericSearch(problem, frontiera)
-  
-  #util.raiseNotDefined()
 
 def uniformCostSearch(problem):
   "Search the node of least total cost first. "
   "*** YOUR CODE HERE ***"
   frontiera = util.PriorityQueue()
   return genericSearch(problem, frontiera)
-  
-  #util.raiseNotDefined()
 
 def aStarSearch(problem, heuristic=nullHeuristic):
   "Search the node that has the lowest combined cost and heuristic first."
@@ -154,8 +135,6 @@ def aStarSearch(problem, heuristic=nullHeuristic):
   #frontiera = util.PriorityQueueWithFunction(heuristic)
   frontiera = util.PriorityQueue()
   return genericSearch(problem, frontiera, heuristic)
-  #util.raiseNotDefined()
-
 
 # Abbreviations
 bfs = breadthFirstSearch

@@ -28,7 +28,7 @@ class ListaAstratta:
     def isEmpty(self):
         raise NotImplementedError( "Should have implemented this" )
     
-    def contains(self, item):
+    def contains(self, stato, costo):
         raise NotImplementedError( "Should have implemented this" )
 
 class Stack(ListaAstratta):
@@ -48,11 +48,14 @@ class Stack(ListaAstratta):
     "Returns true if the stack is empty"
     return len(self.list) == 0
 
-  def contains(self, item):
-    for elem in self.list:
-        if elem[0] == item:
-            return True  
-    return False
+  def contains(self, stato, costo):
+      #print 'item: %s' % (item,)
+      #print 'frontiera: %s' % self.list
+      #print '-------------------'
+      for stati, azioni, costi in self.list:
+          if stati == stato and costi == costo:
+              return True
+      return False 
 
 class Queue(ListaAstratta):
   "A container with a first-in-first-out (FIFO) queuing policy."
@@ -74,11 +77,14 @@ class Queue(ListaAstratta):
     "Returns true if the queue is empty"
     return len(self.list) == 0
 
-  def contains(self, item):
-    for elem in self.list:
-        if elem[0] == item:
-            return True  
-    return False
+  def contains(self, stato, costo):
+      #print 'item: %s' % (item,)
+      #print 'frontiera: %s' % self.list
+      #print '-------------------'
+      for stati, azioni, costi in self.list:
+          if stati == stato and costi == costo:
+              return True
+      return False       
   
 class PriorityQueue(ListaAstratta):
   """
@@ -105,8 +111,11 @@ class PriorityQueue(ListaAstratta):
   def isEmpty(self):
     return len(self.heap) == 0
 
-  def contains(self, item):
-    return item in self.heap
+  def contains(self, stato, costo):
+    for (priority,(stati, azioni, costi)) in self.heap:
+      if stati == stato and costi == costo:
+        return True
+    return False
 
 class PriorityQueueWithFunction(PriorityQueue):
   """

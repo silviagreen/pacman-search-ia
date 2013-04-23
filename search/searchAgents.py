@@ -277,11 +277,10 @@ class CornersProblem(search.SearchProblem):
     self._expanded = 0 # Number of search nodes expanded
 
     "*** YOUR CODE HERE ***"
-    #self.statoIniziale = () #(posizioneAttuale, lista degli angoli visitati)
     self.costFn = lambda x: 1
-    angoliVisitati = ()
+    angoliVisitati = set()
     if self.startingPosition in self.corners:
-        angoliVisitati += (self.startingPosition, )
+        angoliVisitati.add(self.startingPosition)
         
     self.statoIniziale = (self.startingPosition, angoliVisitati)
         
@@ -289,13 +288,11 @@ class CornersProblem(search.SearchProblem):
     "Returns the start state (in your state space, not the full Pacman state space)"
     "*** YOUR CODE HERE ***"
     return self.statoIniziale
-    #util.raiseNotDefined()
     
   def isGoalState(self, state):
     "Returns whether this search state is a goal state of the problem"
-    "*** YOUR CODE HERE ***"
-    return set(state[1]) == set(self.corners)
-    #util.raiseNotDefined()
+    "*** YOUR CODE HERE ***"         
+    return set(state[1]) == set(self.corners) 
        
   def getSuccessors(self, state):
     """
@@ -308,7 +305,6 @@ class CornersProblem(search.SearchProblem):
      required to get there, and 'stepCost' is the incremental 
      cost of expanding to that successor
     """
-    
     successors = []
     for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
       # Add a successor state to the successor list if the action is legal
@@ -320,15 +316,12 @@ class CornersProblem(search.SearchProblem):
          
          "*** YOUR CODE HERE ***"
          if not hitsWall:
-             angoliVisitati = state[1]
+             angoliVisitati = set(state[1])
              if prossimaPosizione in self.corners and prossimaPosizione not in angoliVisitati:
-                 angoliVisitati += (prossimaPosizione, )
-             
+                 angoliVisitati.add(prossimaPosizione)
              prossimoStato = (prossimaPosizione, angoliVisitati)
-             costoAzione = self.costFn(prossimoStato) #self.getCostOfActions( [action] ) tolta perche' rallentava l'esecuzione
-             successors.append(  (prossimoStato , action, costoAzione)  )
-             #successors += [ (prossimoStato , action, costoAzione) ] 
-                 
+             costoAzione = self.costFn(prossimoStato)
+             successors.append( (prossimoStato , action, costoAzione) )             
     
     self._expanded += 1
     #print 'nodes expanded: ' + str(self._expanded)
