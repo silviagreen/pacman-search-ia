@@ -410,7 +410,7 @@ def cornersHeuristic2(state, problem): #RISPETTA I DATI DI VERIFICA
 #ct2           -> Cost: 8   (ok)
 #ct3           -> Cost: 32  (invece di 28)
  
-
+#SFRUTTARE SOMIGLIANZA CON PROBLEMA DEL COMMESSO VIAGGIATORE????
 def cornersHeuristic(state, problem): 
   """
   A heuristic for the CornersProblem that you defined.
