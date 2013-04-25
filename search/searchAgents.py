@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # searchAgents.py
 # ---------------
 # Licensing Information: Please do not distribute or publish solutions to this
@@ -28,6 +29,7 @@ project description for details.
 
 Good luck and happy searching!
 """
+
 from game import Directions
 from game import Agent
 from game import Actions
@@ -344,20 +346,17 @@ class CornersProblem(search.SearchProblem):
 
 
 
-  """
-  AMMISSIBILITA'
+
   
-  Problema rilassato: Pac-Man può muoversi sulla griglia senza considerare i muri. 
-                      (non può muoversi in diagonale dal momento che si trova su una griglia)
-  la nostra euristica corrisponde alla soluzione sul cammino più breve, 
-  in quanto fa si che pacman prima si sposti sull'angolo a lui più vicino,
-  poi segue il bordo del labirinto per visitare i rimanenti angoli
-  
- 
-  
-  """
 def cornersHeuristic(state, problem): 
   """
+  AMMISSIBILITA.
+  Problema rilassato pacman può muoversi sulla griglia senza considerare i muri
+  non può muoversi in diagonale dal momento che si trova su una griglia
+  la nostra euristica corrisponde alla soluzione sul cammino più breve
+  in quanto fa si che pacman prima si sposti sull'angolo a lui più vicino
+  poi segue il bordo del labirinto per visitare i rimanenti angoli
+ 
   A heuristic for the CornersProblem that you defined.
   
     state:   The current search state 
@@ -524,7 +523,8 @@ def foodHeuristic(state, problem):
   """
   position, foodGrid = state
   "*** YOUR CODE HERE ***"
-  return 0
+  return foodGrid.count()
+  #return 0
   
 class ClosestDotSearchAgent(SearchAgent):
   "Search for all food using a sequence of searches"
