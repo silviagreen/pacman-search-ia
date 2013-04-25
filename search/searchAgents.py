@@ -344,13 +344,18 @@ class CornersProblem(search.SearchProblem):
 
 
 
-#NOSTRA EURISTICA:
-#mediumCorners -> Cost: 106 (ok)
-#ct1           -> Cost: 9   (invece di 8)
-#ct2           -> Cost: 8   (ok)
-#ct3           -> Cost: 32  (invece di 28)
+  """
+  AMMISSIBILITA'
+  
+  Problema rilassato: Pac-Man può muoversi sulla griglia senza considerare i muri. 
+                      (non può muoversi in diagonale dal momento che si trova su una griglia)
+  la nostra euristica corrisponde alla soluzione sul cammino più breve, 
+  in quanto fa si che pacman prima si sposti sull'angolo a lui più vicino,
+  poi segue il bordo del labirinto per visitare i rimanenti angoli
+  
  
-#SFRUTTARE SOMIGLIANZA CON PROBLEMA DEL COMMESSO VIAGGIATORE????
+  
+  """
 def cornersHeuristic(state, problem): 
   """
   A heuristic for the CornersProblem that you defined.
@@ -370,46 +375,46 @@ def cornersHeuristic(state, problem):
   
   "*** YOUR CODE HERE ***"
 #PRIMO TENTATIVO
- 
+  
   angoliDaVisitare = list(set(corners) - set(state[1]))
   risultato = 0
   angoloPiuVicino = 0
-  
+   
   #print 'angoli visitati: %s' % state[1]
   #print 'angoli da visitare : %s' % (angoliDaVisitare,)
-
+ 
   def mnhttn_dst(pos1,pos2):
         x1,y1=pos1
         x2,y2=pos2
         return abs(x1-x2)+abs(y1-y2)
-
+ 
   def distanzaMinore(position): #insieme punti e una lista
      distanze = []
-    
+     
      for punto in angoliDaVisitare: 
          distanze.append(mnhttn_dst(position,punto))
      distMinore = min(distanze)
      indicePuntoPiuVicino = distanze.index(distMinore)
      puntoPiuVicino = angoliDaVisitare[indicePuntoPiuVicino]
      return (puntoPiuVicino, distMinore)      
-  
+   
   if len(angoliDaVisitare) == 0:
       return risultato
-  
+   
   elif len(angoliDaVisitare) > 0:
      angoloPiuVicino, risultato = distanzaMinore(state[0])
-
+ 
      totale = 0
      angoliDaVisitare.remove(angoloPiuVicino)
-
-
+ 
+ 
      while len(angoliDaVisitare)>0:
         primoAngolo = angoloPiuVicino 
         angoloPiuVicino, distAltroAngolo = distanzaMinore(primoAngolo)
-        
+         
         angoliDaVisitare.remove(angoloPiuVicino)
         totale +=  distAltroAngolo
-        
+         
           #for angolo in angoliDaVisitare:
     #angoliDaVisitare -= set(angolo)
     #secondoAngolo, distSecAngolo = distanzaMinore(primoAngolo, angoliDaVisitare)
@@ -421,6 +426,9 @@ def cornersHeuristic(state, problem):
   #else: 
      #return 0
   #return 0 # Default to trivial solution
+
+ ### the minimum manhattan distance to the nearest corner
+  #return min( map(lambda x: util.manhattanDistance(x, state[0]), problem.corners) )
 
 
 
