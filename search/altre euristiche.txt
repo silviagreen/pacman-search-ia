@@ -1,0 +1,131 @@
+def cornersHeuristic4(state, problem):
+  """
+  A heuristic for the CornersProblem that you defined.
+  
+    state:   The current search state 
+             (a data structure you chose in your search problem)
+    
+    problem: The CornersProblem instance for this layout.  
+    
+  This function should always return a number that is a lower bound
+  on the shortest path from the state to a goal of the problem.
+  """
+  corners = problem.corners # These are the corner coordinates
+  walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
+  
+  "*** YOUR CODE HERE ***"
+  # state[0] is the location of the current node
+  # state[1] is a tuple location of the corners that have not been visited
+  distance = 0
+  corners_list = list(set(corners) - set(state[1]))
+  xy1 = state[0]
+  temp = 0
+  closest =0
+  distance_list = []
+  min_index = 0
+  farthest = 0
+  distance_to_closest_corner = 0
+  closest = 0
+  
+  # if no corners left - we are done
+  if len(corners_list) == 0:
+      None
+  elif len(corners_list) > 0:
+      # Step 1: If there is at least one corner left, find distance to that corner
+      for i in range(len(corners_list)):
+          xy2 = corners_list[i]
+          # put all distances into a list
+          distance_list.append(abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1]))
+      distance_to_closest_corner = min(distance_list)      
+      min_index = distance_list.index(distance_to_closest_corner)
+      closest_corner = corners_list[min_index]
+      print 'angolo 1 : ' + str(closest_corner)
+      print 'sua distanza 1: ' + str(distance_to_closest_corner)
+      # If using only distance to the closest corner as the heuristics,
+      # Search nodes expanded on mediumCorners is 1555.
+      total = 0
+      # Step 2: if there are more than 1 corner left
+      # find the shortest distance from the closest corner
+      # to the other corner that is closest to the closest corner
+      corners_list.remove(closest_corner)
+      while len(corners_list) > 0:
+          distance_list = []
+          xy1 = closest_corner
+          for i in range(len(corners_list)):
+              xy2 = corners_list[i]
+              # put all distances into a list
+              distance_list.append(abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1]))
+          closest = min(distance_list)
+          min_index = distance_list.index(closest)
+          closest_corner = corners_list[min_index]
+          corners_list.remove(closest_corner)
+          
+          total = total + closest
+          
+      # distance = distance to closest + distance to the closest of the closest    
+      distance = distance_to_closest_corner + total
+      
+  return distance
+  return 0 # Default to trivial solution
+  
+  def cornersHeuristic3(state, problem):  #RISPETTA I DATI DI VERIFICA
+    from util import manhattanDistance
+
+    corners = problem.corners # These are the corner coordinates
+    walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
+   
+    angoliDaVisitare = list(set(corners) - set(state[1]))
+    if len(angoliDaVisitare) == 0:
+        return 0
+    start = problem.startingPosition    
+    position = state[0]    
+    heuristics = []    
+    sum = 0    
+    for corner in corners:             
+        if not angoliDaVisitare.count(corner):
+            continue   
+        heuristic = manhattanDistance(position, corner)        
+        heuristics.append(heuristic)
+        sum += heuristic       
+   
+    #heuristic = (sum/len(angoliDaVisitare))        
+    heuristic = max(heuristics)/len(angoliDaVisitare)
+   
+    return heuristic
+
+
+def cornersHeuristic2(state, problem): #RISPETTA I DATI DI VERIFICA
+  """
+  A heuristic for the CornersProblem that you defined.
+  
+    state:   The current search state 
+             (a data structure you chose in your search problem)
+    
+    problem: The CornersProblem instance for this layout.  
+    
+  This function should always return a number that is a lower bound
+  on the shortest path from the state to a goal of the problem; i.e.
+  it should be admissible (as well as consistent).
+  """
+  corners = problem.corners # These are the corner coordinates
+  walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
+  
+  "*** YOUR CODE HERE ***"
+  coors = state[0]
+  visitedCorners = state[1]
+  top, right = problem.walls.height-2, problem.walls.width-2
+  from math import fabs
+  sum = 0
+  for corner in corners:
+    best = 0
+    if corner and corner in visitedCorners :
+      visited = True
+    else:
+      visited = False
+
+    
+    if not visited:
+      dist = sum + fabs(coors[0] - corner[0]) + fabs(coors[1] - corner[1])
+
+    
+  return sum # Default to trivial solution

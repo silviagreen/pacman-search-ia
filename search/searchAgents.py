@@ -342,67 +342,7 @@ class CornersProblem(search.SearchProblem):
     return len(actions)
 
 
-def cornersHeuristic3(state, problem):  #RISPETTA I DATI DI VERIFICA
-    from util import manhattanDistance
 
-    corners = problem.corners # These are the corner coordinates
-    walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
-   
-    angoliDaVisitare = list(set(corners) - set(state[1]))
-    if len(angoliDaVisitare) == 0:
-        return 0
-    start = problem.startingPosition    
-    position = state[0]    
-    heuristics = []    
-    sum = 0    
-    for corner in corners:             
-        if not angoliDaVisitare.count(corner):
-            continue   
-        heuristic = manhattanDistance(position, corner)        
-        heuristics.append(heuristic)
-        sum += heuristic       
-   
-    #heuristic = (sum/len(angoliDaVisitare))        
-    heuristic = max(heuristics)/len(angoliDaVisitare)
-   
-    return heuristic
-
-
-def cornersHeuristic2(state, problem): #RISPETTA I DATI DI VERIFICA
-  """
-  A heuristic for the CornersProblem that you defined.
-  
-    state:   The current search state 
-             (a data structure you chose in your search problem)
-    
-    problem: The CornersProblem instance for this layout.  
-    
-  This function should always return a number that is a lower bound
-  on the shortest path from the state to a goal of the problem; i.e.
-  it should be admissible (as well as consistent).
-  """
-  corners = problem.corners # These are the corner coordinates
-  walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
-  
-  "*** YOUR CODE HERE ***"
-  coors = state[0]
-  visitedCorners = state[1]
-  top, right = problem.walls.height-2, problem.walls.width-2
-  from math import fabs
-  sum = 0
-  for corner in corners:
-    best = 0
-    if corner and corner in visitedCorners :
-      visited = True
-    else:
-      visited = False
-
-    
-    if not visited:
-      dist = sum + fabs(coors[0] - corner[0]) + fabs(coors[1] - corner[1])
-
-    
-  return sum # Default to trivial solution
 
 #NOSTRA EURISTICA:
 #mediumCorners -> Cost: 106 (ok)
@@ -430,9 +370,10 @@ def cornersHeuristic(state, problem):
   
   "*** YOUR CODE HERE ***"
 #PRIMO TENTATIVO
-  pacmanPos = state[0]
+ 
   angoliDaVisitare = list(set(corners) - set(state[1]))
   risultato = 0
+  angoloPiuVicino = 0
   
   #print 'angoli visitati: %s' % state[1]
   #print 'angoli da visitare : %s' % (angoliDaVisitare,)
@@ -442,30 +383,34 @@ def cornersHeuristic(state, problem):
         x2,y2=pos2
         return abs(x1-x2)+abs(y1-y2)
 
-  def distanzaMinore(position, insiemePunti): #insieme punti e una lista
-     puntoPiuVicino = ()
+  def distanzaMinore(position): #insieme punti e una lista
      distanze = []
-     for punto in insiemePunti: 
-         print (punto,)
-         distanze.append(mnhttn_dst(state[0],punto))
+    
+     for punto in angoliDaVisitare: 
+         distanze.append(mnhttn_dst(position,punto))
      distMinore = min(distanze)
      indicePuntoPiuVicino = distanze.index(distMinore)
-     puntoPiuVicino = insiemePunti[indicePuntoPiuVicino]
-         
+     puntoPiuVicino = angoliDaVisitare[indicePuntoPiuVicino]
      return (puntoPiuVicino, distMinore)      
   
-  if len(angoliDaVisitare):
-     primoAngolo, risultato = distanzaMinore(state[0], angoliDaVisitare)
+  if len(angoliDaVisitare) == 0:
+      return risultato
+  
+  elif len(angoliDaVisitare) > 0:
+     angoloPiuVicino, risultato = distanzaMinore(state[0])
 
      totale = 0
-     angoliDaVisitare.remove(primoAngolo)
+     angoliDaVisitare.remove(angoloPiuVicino)
 
 
      while len(angoliDaVisitare)>0:
-        altroAngolo, distAltroAngolo = distanzaMinore(primoAngolo, angoliDaVisitare)
-        angoliDaVisitare.remove(altroAngolo)
+        primoAngolo = angoloPiuVicino 
+        angoloPiuVicino, distAltroAngolo = distanzaMinore(primoAngolo)
+        
+        angoliDaVisitare.remove(angoloPiuVicino)
         totale +=  distAltroAngolo
-  #for angolo in angoliDaVisitare:
+        
+          #for angolo in angoliDaVisitare:
     #angoliDaVisitare -= set(angolo)
     #secondoAngolo, distSecAngolo = distanzaMinore(primoAngolo, angoliDaVisitare)
     #risultato += distSecAngolo
@@ -473,9 +418,14 @@ def cornersHeuristic(state, problem):
     #primoAngolo = secondoAngolo
      risultato += totale
      return risultato
-  else: 
-     return 0
+  #else: 
+     #return 0
   #return 0 # Default to trivial solution
+
+
+
+
+
 
 class AStarCornersAgent(SearchAgent):
   "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
