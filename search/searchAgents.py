@@ -342,13 +342,8 @@ class CornersProblem(search.SearchProblem):
       x, y = int(x + dx), int(y + dy)
       if self.walls[x][y]: return 999999
     return len(actions)
-
-
-
-
-
   
-def cornersHeuristic(state, problem): 
+def _cornersHeuristic_(state, problem): 
   """
   AMMISSIBILITA.
   Problema rilassato pacman può muoversi sulla griglia senza considerare i muri
@@ -429,10 +424,26 @@ def cornersHeuristic(state, problem):
  ### the minimum manhattan distance to the nearest corner
   #return min( map(lambda x: util.manhattanDistance(x, state[0]), problem.corners) )
 
+import sys
 
+def prossimoAngolo(state, problem):
+    posizioneCorrente, angoliVisitati = state
+    angoliNonVisitati = set(problem.corners) - angoliVisitati
+    distProssimoAng = sys.maxint
+    prossimoAng = None
+    for angolo in angoliNonVisitati:
+        problem.goal = angolo
+        distanza = manhattanHeuristic(posizioneCorrente, problem)
+        if distanza < distProssimoAng:
+            distProssimoAng = distanza
+            prossimoAng = (angolo, angoliVisitati.union(set((angolo,))))
+    return (prossimoAng, distProssimoAng)
 
-
-
+def cornersHeuristic(state, problem):
+    prossimoAng, distanza = prossimoAngolo(state, problem)
+    if prossimoAng != None:
+        return distanza + cornersHeuristic(prossimoAng, problem)
+    return 0
 
 class AStarCornersAgent(SearchAgent):
   "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
