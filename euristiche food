@@ -1,0 +1,372 @@
+#PASSA TUTTO
+-----------------------------------------------------------------
+#nodi espansi: 725 (tutti i test vanno :) :) )
+
+ import util
+  foodsList=foodGrid.asList()
+  distBetweenExtremeFoods = 0
+  distPositionToClosestFood = None
+  for food1 in foodsList:
+    for food2 in foodsList:
+      if (food1, food2) in problem.heuristicInfo:
+        if problem.heuristicInfo[(food1, food2)] > distBetweenExtremeFoods:
+          distBetweenExtremeFoods = problem.heuristicInfo[(food1, food2)]
+      elif (food2, food1) in problem.heuristicInfo:
+        if problem.heuristicInfo[(food2, food1)] > distBetweenExtremeFoods:
+          distBetweenExtremeFoods = problem.heuristicInfo[(food2, food1)]
+      else:
+        problem.heuristicInfo[(food1, food2)] = mazeDistance(food1, food2, problem.startingGameState)
+        if problem.heuristicInfo[(food1, food2)] > distBetweenExtremeFoods:
+          distBetweenExtremeFoods = problem.heuristicInfo[(food1, food2)]
+  for food in foodsList:
+    if (position, food) in problem.heuristicInfo:
+      if distPositionToClosestFood == None or distPositionToClosestFood > problem.heuristicInfo[(position, food)]:
+        distPositionToClosestFood = problem.heuristicInfo[(position, food)]
+    elif (food, position) in problem.heuristicInfo:
+      if distPositionToClosestFood == None or distPositionToClosestFood > problem.heuristicInfo[(food, position)]:
+        distPositionToClosestFood = problem.heuristicInfo[(food, position)]
+    else:
+      problem.heuristicInfo[(position, food)] = mazeDistance(position, food, problem.startingGameState)
+      if distPositionToClosestFood == None or distPositionToClosestFood > problem.heuristicInfo[(position, food)]:
+        distPositionToClosestFood = problem.heuristicInfo[(position, food)]
+  if distPositionToClosestFood == None:
+    distPositionToClosestFood = 0      
+  heuristicValue = distBetweenExtremeFoods + distPositionToClosestFood
+  
+
+  return heuristicValue
+
+def getNumWalls(walls, ll, ur):
+  numWalls = 0
+  for i in range(ll[0], ur[0]):
+    for j in range(ll[1], ur[1]):
+      if (walls[i][j]):
+        numWalls = numWalls + 1
+  return numWalls		
+-----------------------------------------------------------------
+#nodi espansi: 8109
+top, right = problem.walls.height-2, problem.walls.width-2
+  foodList = foodGrid.asList()
+
+  closestDistance = top + right
+  if len(foodList) > 0:
+    for food in foodList:
+      dist = abs(position[0] - food[0]) + abs(position[1] - food[1])
+      if dist < closestDistance:
+        closestDistance = dist
+  else:
+    closestDistance = 0
+
+  furthestDistance = 0
+  for f1 in foodList:
+    for f2 in foodList:
+      dist = abs(f1[0] - f2[0]) + abs(f1[1] - f2[1])
+      if dist > furthestDistance:
+        furthestDistance = dist
+
+  return closestDistance + furthestDistance #+ len(foodList) - 2
+---------------------------------------------------------------------------
+#nodi espansi: 11126
+foodlist = foodGrid.asList()
+    if len(foodlist) == 0:
+        return 0
+    num = min(map(lambda foodplace: ((position[0] - foodplace[0]) ** 2 + (position[1] - foodplace[1]) ** 2 ) ** 0.5, foodlist))
+    return num + len(foodlist) - 1
+----------------------------------------------------------------------------
+#nodi espansi: 10576
+closestDistance = 0
+    for foodCord in foodGrid.asList():
+       xy1 = foodCord
+       xy2 = position
+       distance = abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
+       
+       if distance > closestDistance:
+           closestDistance = distance
+
+    return closestDistance
+ -----------------------------------------------------------------------------
+
+#NON PASSANO
+-------------------------------------------------------------------
+# used as keys for the dictionary
+    DISTANCES = 'Distances'
+# Helper functions ***
+    def memoryDistances():
+        return problem.heuristicInfo[DISTANCES]
+    
+    def getFoodGrid (state):
+        return state[1]
+  
+    def getFoodList(state):
+        return getFoodGrid(state).asList()
+
+    def getFoodDistances():
+        """Returns the distance matrix of the original food items"""
+        return problem.heuristicInfo[DISTANCES]
+
+    def mnhttn_dst( pos1, pos2):
+        x1,y1 = pos1
+        x2, y2 = pos2
+        return abs(x1 - x2) + abs(y1 - y2)
+
+    def getCurrentPosition(state):
+        return state[0]
+
+    def getFoodCoord(food_index):
+        return problem.heuristicInfo[food_index]
+
+    def getDistance(food_index1, food_index2):
+        return problem.heuristicInfo[DISTANCES][food_index1][food_index2]
+
+    def calculateDistance(coord1, coord2):
+        """Distance function"""
+        # need to write this guy
+
+    def stillFood(food_index, food_config):
+        """Returns boolean, whether the food_index is present in the given food
+config or not"""
+
+# end helper functions ***
+    
+    def isFirstRun():
+        """Tells us whether this is the first time heuristic has been called or
+not"""
+        return not (DISTANCES in problem.heuristicInfo)
+    
+    def initialize():
+        """Set up the distances matrix, store in problem.heuristicInfo"""
+        points = []
+        foodList = getFoodList(state)
+        j = 0
+        for pos in foodList:
+            points.append(pos)
+            problem.heuristicInfo[j] = pos
+            problem.heuristicInfo[pos] = j
+            j += 1
+        distances = [ [ [] for i in foodList] for j in foodList]
+        for i in range(len(foodList)):
+            for k in range(len(foodList)):
+                distances[i][k] = mnhttn_dst(foodList[i], foodList[k])
+        problem.heuristicInfo[DISTANCES] = distances
+        
+    def getMinUneatenNeighbour(food_index, food_config, distances):
+        """Returns the distance to the nearest uneaten neighbour/current position"""
+        distances_vector = distances[food_index]
+        min_distance = -1
+        for other_index in range(distances[food_index]):
+            distance = distances[food_index][other_index]
+            if other_index != food_index and stillFood(other_index, food_config):
+                if min_distance == -1:
+                    min_distance = distance
+                elif distance < min_distance:
+                    min_distance = distance
+        return min_distance
+    
+    def getFoodConfig(state):
+        fd_crd_lst = getFoodList(state)
+        fd_indx_lst = []
+        for fd_crd in fd_crd_lst:
+            fd_indx_lst.append(problem.heuristicInfo[fd_crd])
+        fd_indx_lst.sort()
+        return tuple(fd_indx_lst)
+    
+    def getDistances(state, foodConfig):
+        """Returns the distances matrix, with the last row, column added for the
+current position"""
+        import copy
+
+        distances = copy.deepcopy(getFoodDistances())
+        size = len(distances)
+        current_position = getCurrentPosition(state)
+        final_row = []
+        for i in range(len(distances)):
+            food_coord = getFoodCoord(i)
+            dist = calculateDistance(food_coord, current_position)
+            distances[i].append(dist)
+            final_row.append(dist)
+
+        distances.append(final_row)
+        return distances
+    
+    def getMinPathCost(state, foodConfig):
+        """We assume distances is a 2x2 matrix of the distances
+Food config tells us whatever foods are still valid"""
+        distances = getDistances(state, foodConfig)
+        n = len(distances)
+        cost = 0
+        for i in range(n):
+            if (stillFood(i, foodConfig)):
+                cost += getMinUneatenNeighbour(i, foodConfig, distances)
+        return cost
+    # End helpers
+    
+    position, foodGrid = state
+    
+    if isFirstRun():
+        initialize()
+        
+    fd_cnfg = getFoodConfig(state)
+    
+    if len(fd_cnfg) == 0:
+        return 0
+    
+    #if not isSeen(fd_cnfg):
+        #setConfigPaths(fd_cnfg)
+        
+    min_cost = getMinPathCost(state, fd_cnfg)
+    
+    return min_cost
+-------------------------------------------------------------------
+max=-1
+  maxdot=position
+  for X in foodGrid.asList(): #find the farthest dot
+      tmp=abs(position[0]-X[0])+abs(position[1]-X[1])
+      if(tmp>max):
+          max=tmp
+          maxdot=X
+  dim=position[0]-maxdot[0]
+  dotnumber=0
+  if dim>0 :
+      """
+count the nubmer of dots which's direction is different from farthest
+"""
+      for X in foodGrid.asList():
+          if (position[0]-X[0])<0 :
+              dotnumber+=1
+  elif dim<0:
+      for X in foodGrid.asList():
+          if (position[0]-X[0])>0 :
+              dotnumber+=1
+  else:
+      for X in foodGrid.asList():
+          if (position[0]-X[0])!=0 :
+              dotnumber+=1
+  return max+dotnumber
+--------------------------------------------------------------------
+foodList = list(foodGrid.asList())
+    gs = problem.startingGameState
+
+    if not problem.heuristicInfo.get('foodDistanceGrid', False):
+        problem.heuristicInfo['foodDistanceGrid'] = {}
+
+    foodDistanceGrid = problem.heuristicInfo['foodDistanceGrid']
+
+    totalDistance = 0
+
+    #if len(foodList) > 0:
+
+    return totalDistance 
+---------------------------------------------------------------------
+
+
+
+# NON PASSANO TEST CONSISTENZA
+---------------------------------------------------------------------
+class FasterPriorityQueue:
+  """
+    Implements a priority queue data structure.  This differs from the 
+    PriorityQueue in that it allows multiple copies of the same object, 
+    and doesn't support getPriority or changing priority.
+  """
+  
+  def  __init__(self):  
+    self.heap = []
+    
+  def push(self, item, priority):
+      pair = (priority,item)
+      heapq.heappush(self.heap,pair)
+
+  def pop(self):
+      (priority,item) = heapq.heappop(self.heap)
+      return item
+  
+  def isEmpty(self):
+    return len(self.heap) == 0
+    
+
+def heuFOOd
+ return myFunc7(state)
+
+def buildGraph(foodGrid,PMpos):
+    V=set()
+    E=util.FasterPriorityQueue() 
+    listFood=foodGrid.asList()
+    listFood.append(PMpos)
+    while len(listFood)!=0:
+        verTex=listFood.pop()
+        V.add(verTex)
+        for restVertex in listFood:
+            W=manhattanDistance(verTex,restVertex)
+            pair =(verTex,restVertex)
+            E.push(pair,W)
+    return (E,V)
+def buildListFood(state):
+    PMpos=state[0]
+    foodGrid=state[1]
+    listFood=foodGrid.asList()
+    returnList=[]
+    listDistance=[]
+    startAt=PMpos
+    totalpath=0
+    #if len(listFood)<=5: return (listFood,[],len(listFood))
+    while len(listFood)>0 :
+        closestFood=listFood[0]
+        min=manhattanDistance(startAt,listFood[0])
+        for food in listFood:
+            if  (manhattanDistance(startAt,food)<=min):
+                min=manhattanDistance(startAt,food)
+                closestFood=food
+        returnList.append(closestFood)
+        listFood.remove(closestFood)
+        startAt=closestFood
+        totalpath+=min
+        listDistance.append(min)
+    return (returnList,listDistance,totalpath)
+def myFunc1(state):
+   return  state[1].count()
+def myFunc6(state):
+    listTransverse,listMahantan,totalPath=buildListFood(state)
+    if state[1].count() ==0 : return 0
+    return totalPath
+def myFunc7(state):
+    PMpos=state[0]
+    foodGrid=state[1]
+    G=buildGraph(foodGrid, PMpos)
+    totalpath,mst_tree=mst(G)
+    return totalpath
+def mst(G):
+    E=G[0]
+    V=G[1]
+    mst_Tree=[]
+    listofSet=list()
+    totalpath=0;
+    for verTex in V:
+        newSet=set()
+        newSet.add(verTex)
+        listofSet.append(newSet)
+    count =0
+    while not(E.isEmpty()):
+        e=E.pop()
+        count+=1
+        p1=e[0]
+        p2=e[1]
+        
+        for aSet in listofSet:         
+             if (p1  in aSet):
+                 p1Set=aSet 
+             if (p2 in aSet):
+                 p2Set=aSet
+        if (p1Set==p2Set):
+            continue
+        else:
+            w=util.manhattanDistance(p1,p2)
+            newSet=set(p1Set.union(p2Set))
+            listofSet.remove(p1Set)
+            listofSet.remove(p2Set)
+            listofSet.append(newSet)
+            totalpath+=w
+            mst_Tree.append(e)
+            if (len(listofSet)==1) : break     
+    return (totalpath,mst_Tree)
+    
+-------------------------------------------------------------------------------

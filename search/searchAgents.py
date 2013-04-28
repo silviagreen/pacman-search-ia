@@ -537,6 +537,53 @@ def foodHeuristic(state, problem):
   return foodGrid.count()
   #return 0
   
+#def foodHeuristic(state, problem):
+#  position, foodGrid = state
+    
+  "*** YOUR CODE HERE ***"
+
+  
+
+
+  
+  
+class ClosestDotSearchAgent(SearchAgent):
+  "Search for all food using a sequence of searches"
+  def registerInitialState(self, state):
+    self.actions = []
+    currentState = state
+    while(currentState.getFood().count() > 0): 
+      nextPathSegment = self.findPathToClosestDot(currentState) # The missing piece
+      self.actions += nextPathSegment
+      for action in nextPathSegment: 
+        legal = currentState.getLegalActions()
+        if action not in legal: 
+          t = (str(action), str(currentState))
+          raise Exception, 'findPathToClosestDot returned an illegal move: %s!\n%s' % t
+        currentState = currentState.generateSuccessor(0, action)
+    self.actionIndex = 0
+    print 'Path found with cost %d.' % len(self.actions)
+    
+  def findPathToClosestDot(self, gameState):
+    "Returns a path (a list of actions) to the closest dot, starting from gameState"
+    # Here are some useful elements of the startState
+    startPosition = gameState.getPacmanPosition()
+    food = gameState.getFood()
+    walls = gameState.getWalls()
+    problem = AnyFoodSearchProblem(gameState)
+
+    "*** YOUR CODE HERE ***"
+    import search
+    return search.astar(problem)
+  
+    
+
+ 
+ 
+def manhattanDistance( xy1, xy2 ):
+  "Returns the Manhattan distance between points xy1 and xy2"
+  return abs( xy1[0] - xy2[0] ) + abs( xy1[1] - xy2[1] )
+
 class ClosestDotSearchAgent(SearchAgent):
   "Search for all food using a sequence of searches"
   def registerInitialState(self, state):
