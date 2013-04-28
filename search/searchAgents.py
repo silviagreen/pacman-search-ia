@@ -507,7 +507,7 @@ class AStarFoodSearchAgent(SearchAgent):
     self.searchFunction = lambda prob: search.aStarSearch(prob, foodHeuristic)
     self.searchType = FoodSearchProblem
 
-def foodHeuristic(state, problem):
+def foodHeuristicMY(state, problem):
   """
   Your heuristic for the FoodSearchProblem goes here.
   
@@ -537,15 +537,153 @@ def foodHeuristic(state, problem):
   return foodGrid.count()
   #return 0
   
-#def foodHeuristic(state, problem):
-#  position, foodGrid = state
+"""
+DATABASE DI PATTERN DISGIUNTI
+nel primo database ci sono le lunghezze dei cammini che congiungono due pallini
+nel secondo database ci sono due pallini che congiungono la posizione attuale di pacman con un pallino
+si prende il massimo del primo (MAX), e il minimo del secondo (MIN)
+in questo si ottiene un lower bound del ccosto della soluzione dell'intero problema
+
+h = MAX + MIN 
+
+CONSISTENZA : h(N) <= c(N, P) + h(P) (1)
+c(N,P) = 1 per definizione
+quindi deve essere che h(N) <= h(P) +1
+
+MAX non cambia finche non viene mangiato uno dei due cibi coinvolti
+qualora cio dovesse succedere, MAX viene diminuito o resta uguale, ma non aumenta mai
+se MAX resta uguale sia in h(N) che in h(P), la (1) è verificata
+
+se MAX diminuisce:
+    -MAX diminuisce drasticamente, caso peggiore: 
+    (len(lato lungo) = l, len(lato corto) = c)
+%%%%%%%%%%%%%%%%%%%%
+%                PO%  h(N) = MAX + MIN = (l+c) + 1 
+%                  %
+%                  %
+%                  %
+%OO                %
+%%%%%%%%%%%%%%%%%%%%
+
+|
+V
+
+%%%%%%%%%%%%%%%%%%%%
+%                 P%
+%                  % h(P) = MAX + MIN = (1) + (l + c)
+%                  %
+%                  %
+%OO                %
+%%%%%%%%%%%%%%%%%%%%
+   
+h(N) <= h(P) +1
+
+(l+c) + 1  <=  (1) + (l + c) + 1 -> vero
+
+    -MAX dimimuisce di tanto, caso limite:
+    
+%%%%%%%%%%%%%%%%%%%%
+%                 O%
+%                  % h(P) = MAX + MIN = (l + c) + 1
+%                  %
+%P                 %
+%OO                %
+%%%%%%%%%%%%%%%%%%%%
+
+|
+V
+
+%%%%%%%%%%%%%%%%%%%%
+%                 O%
+%                  % h(P) = MAX + MIN = (l + c - 1) + 1
+%                  %
+%                  %
+%PO                %
+%%%%%%%%%%%%%%%%%%%%
+
+h(N) <= h(P) +1
+(l + c) + 1 <= 1 + (l + c - 1) + 1  -> vero
+
+""" 
+
+#sembra fare una funzione che faccia i controlli dentro gli il rallenti il tutto 
+def foodHeuristic(state, problem):
+  position, foodGrid = state
     
   "*** YOUR CODE HERE ***"
-
+  foodList = foodGrid.asList()
   
-
-
+  maxDistanzaCibi = 0
+  minDistanzaCiboPacman = 0
   
+  
+  #aggioro maxDistanzaCibi
+  for cibo1 in foodList:
+     for cibo2 in foodList:
+       #se il valore è già presente nel database aggiorno maxDistanzaCibi
+       if (cibo1, cibo2) in problem.heuristicInfo:
+            if maxDistanzaCibi < problem.heuristicInfo[(cibo1, cibo2)]:
+                maxDistanzaCibi = problem.heuristicInfo[(cibo1, cibo2)]
+       elif (cibo2, cibo1) in problem.heuristicInfo:
+             if maxDistanzaCibi < problem.heuristicInfo[(cibo2, cibo1)]:
+                maxDistanzaCibi = problem.heuristicInfo[(cibo2, cibo1)]
+       else: #se non è nel database, lo calcolo e lo aggiungo al database
+            problem.heuristicInfo[(cibo1, cibo2)] = mazeDistance(cibo1, cibo2, problem.startingGameState)
+            if maxDistanzaCibi < problem.heuristicInfo[(cibo1, cibo2)]:
+                maxDistanzaCibi = problem.heuristicInfo[(cibo1, cibo2)]
+
+  #aggiorno minDistanzaCiboPacman
+  #i controlli minDistanzaCiboPacman == 0 riducono drastiucamente il numero di nodi espansi
+  for cibo in foodList:
+      #se c'è un valore corrispondente nel database
+      if (cibo, position) in problem.heuristicInfo:
+          if minDistanzaCiboPacman == 0 or minDistanzaCiboPacman > problem.heuristicInfo[(cibo, position)]:
+                minDistanzaCiboPacman = problem.heuristicInfo[(cibo, position)]
+      elif (position, cibo) in problem.heuristicInfo:
+          if minDistanzaCiboPacman == 0 or minDistanzaCiboPacman > problem.heuristicInfo[(position, cibo)]:
+                minDistanzaCiboPacman = problem.heuristicInfo[(position, cibo)]
+      else: #se non c'è un valore associato alla cella, lo calcolo e lo inserisco nel database
+          problem.heuristicInfo[(position, cibo)] = mazeDistance(position, cibo, problem.startingGameState)
+          if minDistanzaCiboPacman == 0 or minDistanzaCiboPacman > problem.heuristicInfo[(position, cibo)]:
+                minDistanzaCiboPacman = problem.heuristicInfo[(position, cibo)]
+          
+  return maxDistanzaCibi + minDistanzaCiboPacman
+          
+          
+  
+def foodHeuristic____(state, problem):
+    
+  
+  position, foodGrid = state
+  foodsList=foodGrid.asList()
+  distBetweenExtremeFoods = 0
+  distPositionToClosestFood = 0
+  for food1 in foodsList:
+    for food2 in foodsList:
+      if (food1, food2) in problem.heuristicInfo:
+        if problem.heuristicInfo[(food1, food2)] > distBetweenExtremeFoods:
+          distBetweenExtremeFoods = problem.heuristicInfo[(food1, food2)]
+      elif (food2, food1) in problem.heuristicInfo:
+        if problem.heuristicInfo[(food2, food1)] > distBetweenExtremeFoods:
+          distBetweenExtremeFoods = problem.heuristicInfo[(food2, food1)]
+      else:
+        problem.heuristicInfo[(food1, food2)] = mazeDistance(food1, food2, problem.startingGameState)
+        if problem.heuristicInfo[(food1, food2)] > distBetweenExtremeFoods:
+          distBetweenExtremeFoods = problem.heuristicInfo[(food1, food2)]
+  for food in foodsList:
+    if (position, food) in problem.heuristicInfo:
+      if distPositionToClosestFood == 0 or distPositionToClosestFood > problem.heuristicInfo[(position, food)]:
+        distPositionToClosestFood = problem.heuristicInfo[(position, food)]
+    elif (food, position) in problem.heuristicInfo:
+      if distPositionToClosestFood == 0 or distPositionToClosestFood > problem.heuristicInfo[(food, position)]:
+        distPositionToClosestFood = problem.heuristicInfo[(food, position)]
+    else:
+      problem.heuristicInfo[(position, food)] = mazeDistance(position, food, problem.startingGameState)
+      if distPositionToClosestFood == 0 or distPositionToClosestFood > problem.heuristicInfo[(position, food)]:
+        distPositionToClosestFood = problem.heuristicInfo[(position, food)]
+    
+  heuristicValue = distBetweenExtremeFoods + distPositionToClosestFood
+  return heuristicValue
   
 class ClosestDotSearchAgent(SearchAgent):
   "Search for all food using a sequence of searches"
@@ -678,10 +816,14 @@ def mazeDistance(point1, point2, gameState):
   
   This might be a useful helper function for your ApproximateSearchAgent.
   """
+  #print 'GIRO'
   x1, y1 = point1
   x2, y2 = point2
   walls = gameState.getWalls()
   assert not walls[x1][y1], 'point1 is a wall: ' + point1
   assert not walls[x2][y2], 'point2 is a wall: ' + str(point2)
   prob = PositionSearchProblem(gameState, start=point1, goal=point2, warn=False)
-  return len(search.bfs(prob))
+  distanza = len(search.bfs(prob))
+  #print "i punti " + str(point1) + " " + str(point2) + " distano " + str(distanza)
+  return distanza
+  #return len(search.bfs(prob))

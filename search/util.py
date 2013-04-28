@@ -117,6 +117,8 @@ class PriorityQueue(ListaAstratta):
         return True
     return False
 
+
+
 class PriorityQueueWithFunction(PriorityQueue):
   """
   Implements a priority queue with the same push/pop signature of the
