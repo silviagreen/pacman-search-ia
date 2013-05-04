@@ -257,6 +257,17 @@ def euclideanHeuristic(position, problem, info={}):
 #####################################################
 # This portion is incomplete.  Time to write code!  #
 #####################################################
+def manhattanDistance( xy1, xy2 ):
+  "Returns the Manhattan distance between points xy1 and xy2"
+  return abs( xy1[0] - xy2[0] ) + abs( xy1[1] - xy2[1] )
+  
+def euclideanDistance(xy1, xy2):
+  "Returns the Euclidean distance distance between points xy1 and xy2"
+  return ( (xy1[0] - xy2[0]) ** 2 + (xy1[1] - xy2[1]) ** 2 ) ** 0.5
+  
+def chebyshevDistance(xy1, xy2):
+    "Returns the Chebyshev distance distance between points xy1 and xy2"
+    return max(abs( xy1[0] - xy2[0] ), abs( xy1[1] - xy2[1] ))
 
 class CornersProblem(search.SearchProblem):
   """
@@ -426,24 +437,74 @@ def _cornersHeuristic_(state, problem):
 
 import sys
 
-def prossimoAngolo(state, problem):
+def prossimoAngolo(state, problem, distanceFunction):
     posizioneCorrente, angoliVisitati = state
     angoliNonVisitati = set(problem.corners) - angoliVisitati
     distProssimoAng = sys.maxint
     prossimoAng = None
     for angolo in angoliNonVisitati:
-        problem.goal = angolo
-        distanza = manhattanHeuristic(posizioneCorrente, problem)
+        #problem.goal = angolo
+        distanza = distanceFunction(posizioneCorrente, angolo)
         if distanza < distProssimoAng:
             distProssimoAng = distanza
             prossimoAng = (angolo, angoliVisitati.union(set((angolo,))))
     return (prossimoAng, distProssimoAng)
 
-def cornersHeuristic(state, problem):
-    prossimoAng, distanza = prossimoAngolo(state, problem)
+"""
+layout: mediumCorners
+DATI DI CONFRONTO:
+_________________________________________________________________
+|  DISTANZA   |  TEMPO ESECUZ.  |  COSTO TOT.  |  NODI ESPANSI  |
+|Manhattan    |    0.1 sec.     |     106      |      755       |
+|Euclidean    |    0.1 sec.     |     106      |      818       |
+|Chebyshev    |    0.2 sec.     |     106      |      888       |
+
+layout: ct1
+DATI DI CONFRONTO:
+_________________________________________________________________
+|  DISTANZA   |  TEMPO ESECUZ.  |  COSTO TOT.  |  NODI ESPANSI  |
+|Manhattan    |    0.0 sec.     |      8       |       15       |
+|Euclidean    |    0.0 sec.     |      8       |       15       |
+|Chebyshev    |    0.0 sec.     |      8       |       15       |
+
+layout: ct2
+DATI DI CONFRONTO:
+_________________________________________________________________
+|  DISTANZA   |  TEMPO ESECUZ.  |  COSTO TOT.  |  NODI ESPANSI  |
+|Manhattan    |    0.0 sec.     |      8       |       8        |
+|Euclidean    |    0.0 sec.     |      8       |       8        |
+|Chebyshev    |    0.0 sec.     |      8       |       8        |
+
+layout: ct3
+DATI DI CONFRONTO:
+_________________________________________________________________
+|  DISTANZA   |  TEMPO ESECUZ.  |  COSTO TOT.  |  NODI ESPANSI  |
+|Manhattan    |    0.0 sec.     |      28      |      165       |
+|Euclidean    |    0.0 sec.     |      28      |      161       |
+|Chebyshev    |    0.0 sec.     |      28      |      192       |
+"""
+
+#usando Manhattan Distance
+def cornersHeuristic_0(state, problem):
+    prossimoAng, distanza = prossimoAngolo(state, problem, manhattanDistance)
     if prossimoAng != None:
         return distanza + cornersHeuristic(prossimoAng, problem)
     return 0
+
+#usando Euclidean Disance
+def cornersHeuristic_1(state, problem):
+    prossimoAng, distanza = prossimoAngolo(state, problem, euclideanDistance)
+    if prossimoAng != None:
+        return distanza + cornersHeuristic(prossimoAng, problem)
+    return 0
+
+#usando Chebyshev Distance
+def cornersHeuristic(state, problem):
+    prossimoAng, distanza = prossimoAngolo(state, problem, chebyshevDistance)
+    if prossimoAng != None:
+        return distanza + cornersHeuristic(prossimoAng, problem)
+    return 0
+
 
 class AStarCornersAgent(SearchAgent):
   "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
@@ -718,9 +779,7 @@ class ClosestDotSearchAgent(SearchAgent):
 
  
  
-def manhattanDistance( xy1, xy2 ):
-  "Returns the Manhattan distance between points xy1 and xy2"
-  return abs( xy1[0] - xy2[0] ) + abs( xy1[1] - xy2[1] )
+
 
 class ClosestDotSearchAgent(SearchAgent):
   "Search for all food using a sequence of searches"
