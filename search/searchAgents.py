@@ -459,6 +459,14 @@ _________________________________________________________________
 |Euclidean    |    0.1 sec.     |     106      |      818       |
 |Chebyshev    |    0.2 sec.     |     106      |      888       |
 
+layout: bigCorners
+DATI DI CONFRONTO:
+_________________________________________________________________
+|  DISTANZA   |  TEMPO ESECUZ.  |  COSTO TOT.  |  NODI ESPANSI  |
+|Manhattan    |    0.4 sec.     |     162      |       1813     |
+|Euclidean    |    0.5 sec.     |     162      |       2044     |
+|Chebyshev    |    0.6 sec.     |     162      |       2296     |
+
 layout: ct1
 DATI DI CONFRONTO:
 _________________________________________________________________
@@ -492,7 +500,7 @@ def cornersHeuristic_0(state, problem):
     return 0
 
 #usando Euclidean Disance
-def cornersHeuristic_1(state, problem):
+def cornersHeuristic_2(state, problem):
     prossimoAng, distanza = prossimoAngolo(state, problem, euclideanDistance)
     if prossimoAng != None:
         return distanza + cornersHeuristic(prossimoAng, problem)
@@ -668,7 +676,7 @@ h(N) <= h(P) +1
 """ 
 
 #sembra fare una funzione che faccia i controlli dentro gli il rallenti il tutto 
-def foodHeuristic(state, problem):
+def foodHeuristic_725(state, problem):
   position, foodGrid = state
     
   "*** YOUR CODE HERE ***"
@@ -712,39 +720,25 @@ def foodHeuristic(state, problem):
           
           
   
-def foodHeuristic____(state, problem):
+def foodHeuristic(state, problem):
+   #nodi espansi: 10576
+    position, foodGrid = state
     
-  
-  position, foodGrid = state
-  foodsList=foodGrid.asList()
-  distBetweenExtremeFoods = 0
-  distPositionToClosestFood = 0
-  for food1 in foodsList:
-    for food2 in foodsList:
-      if (food1, food2) in problem.heuristicInfo:
-        if problem.heuristicInfo[(food1, food2)] > distBetweenExtremeFoods:
-          distBetweenExtremeFoods = problem.heuristicInfo[(food1, food2)]
-      elif (food2, food1) in problem.heuristicInfo:
-        if problem.heuristicInfo[(food2, food1)] > distBetweenExtremeFoods:
-          distBetweenExtremeFoods = problem.heuristicInfo[(food2, food1)]
-      else:
-        problem.heuristicInfo[(food1, food2)] = mazeDistance(food1, food2, problem.startingGameState)
-        if problem.heuristicInfo[(food1, food2)] > distBetweenExtremeFoods:
-          distBetweenExtremeFoods = problem.heuristicInfo[(food1, food2)]
-  for food in foodsList:
-    if (position, food) in problem.heuristicInfo:
-      if distPositionToClosestFood == 0 or distPositionToClosestFood > problem.heuristicInfo[(position, food)]:
-        distPositionToClosestFood = problem.heuristicInfo[(position, food)]
-    elif (food, position) in problem.heuristicInfo:
-      if distPositionToClosestFood == 0 or distPositionToClosestFood > problem.heuristicInfo[(food, position)]:
-        distPositionToClosestFood = problem.heuristicInfo[(food, position)]
-    else:
-      problem.heuristicInfo[(position, food)] = mazeDistance(position, food, problem.startingGameState)
-      if distPositionToClosestFood == 0 or distPositionToClosestFood > problem.heuristicInfo[(position, food)]:
-        distPositionToClosestFood = problem.heuristicInfo[(position, food)]
-    
-  heuristicValue = distBetweenExtremeFoods + distPositionToClosestFood
-  return heuristicValue
+    "*** YOUR CODE HERE ***"
+    foodList = foodGrid.asList()
+    closestDistance = 0
+    for foodCord in foodGrid.asList():
+       xy1 = foodCord
+       xy2 = position
+       distance = abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
+       print 'la distanza tra %s' % (xy1,) + ' e %s' % (xy2,) + ' e ' + str(distance) 
+       
+       if distance > closestDistance:
+           closestDistance = distance
+
+    print 'closest distance è: ' + str(closestDistance)
+    return closestDistance 
+ 
   
 class ClosestDotSearchAgent(SearchAgent):
   "Search for all food using a sequence of searches"
