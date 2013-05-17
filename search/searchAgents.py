@@ -535,12 +535,23 @@ class FoodSearchProblem:
     self.startingGameState = startingGameState
     self._expanded = 0
     self.heuristicInfo = {} # A dictionary for the heuristic to store information
+    
+    # For display purposes
+    self._visited, self._visitedlist, self._expanded = {}, [], 0
       
   def getStartState(self):
     return self.start
   
   def isGoalState(self, state):
-    return state[1].count() == 0
+      isGoal = state[1].count() == 0
+       # For display purposes only
+      if isGoal:
+       self._visitedlist.append(state[0])
+       import __main__
+       if '_display' in dir(__main__):
+         if 'drawExpandedCells' in dir(__main__._display): #@UndefinedVariable
+           __main__._display.drawExpandedCells(self._visitedlist) #@UndefinedVariable
+      return isGoal
 
   def getSuccessors(self, state):
     "Returns successor states, the actions they require, and a cost of 1."
@@ -554,6 +565,12 @@ class FoodSearchProblem:
         nextFood = state[1].copy()
         nextFood[nextx][nexty] = False
         successors.append( ( ((nextx, nexty), nextFood), direction, 1) )
+        
+      # Bookkeeping for display purposes
+    self._expanded += 1 
+    if state not in self._visited:
+      self._visited[state[0]] = True
+      self._visitedlist.append(state[0])
     return successors
 
   def getCostOfActions(self, actions):
@@ -676,7 +693,7 @@ h(N) <= h(P) +1
 """ 
 
 #sembra fare una funzione che faccia i controlli dentro gli il rallenti il tutto 
-def foodHeuristic_725(state, problem):
+def foodHeuristic(state, problem):
   position, foodGrid = state
     
   "*** YOUR CODE HERE ***"
@@ -720,7 +737,7 @@ def foodHeuristic_725(state, problem):
           
           
   
-def foodHeuristic(state, problem):
+def foodHeuristic_2(state, problem):
    #nodi espansi: 10576
     position, foodGrid = state
     
@@ -731,12 +748,12 @@ def foodHeuristic(state, problem):
        xy1 = foodCord
        xy2 = position
        distance = abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
-       print 'la distanza tra %s' % (xy1,) + ' e %s' % (xy2,) + ' e ' + str(distance) 
+       #print 'la distanza tra %s' % (xy1,) + ' e %s' % (xy2,) + ' e ' + str(distance) 
        
        if distance > closestDistance:
            closestDistance = distance
 
-    print 'closest distance è: ' + str(closestDistance)
+    #print 'closest distance è: ' + str(closestDistance)
     return closestDistance 
  
   
