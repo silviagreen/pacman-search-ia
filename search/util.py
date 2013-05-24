@@ -49,9 +49,6 @@ class Stack(ListaAstratta):
     return len(self.list) == 0
 
   def contains(self, stato, costo):
-      #print 'item: %s' % (item,)
-      #print 'frontiera: %s' % self.list
-      #print '-------------------'
       for stati, azioni, costi in self.list:
           if stati == stato and costi == costo:
               return True
@@ -78,9 +75,6 @@ class Queue(ListaAstratta):
     return len(self.list) == 0
 
   def contains(self, stato, costo):
-      #print 'item: %s' % (item,)
-      #print 'frontiera: %s' % self.list
-      #print '-------------------'
       for stati, azioni, costi in self.list:
           if stati == stato and costi == costo:
               return True

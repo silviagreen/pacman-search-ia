@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Relazione - Progetto I.A. 2013</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+        <link href="css/docs.css" rel="stylesheet">
+        <link href="css/stile.css" rel="stylesheet" media="screen">
+        <style type="text/css">
+        </style>
+    </head>
+    <body data-spy="scroll" data-target=".bs-docs-sidebar">
+        <div class="container">
+            <div class="titolo">
+                <h1>Ricerca in Pac-Man</h1>
+                <p class="lead nomi">
+                    Rango Massimiliano, Segato Silvia
+                </p>
+                <p class="lead">
+                    Corso di Intelligenza Artificiale 2012 / 2013
+                </p>
+                <img src="img/pacman_game.gif"/>
+            </div>
+            <div class="row-fluid">
+	            <div class="span3 bs-docs-sidebar indice">
+	                <ul class="nav nav-list bs-docs-sidenav affix-top">
+	                    <li>
+	                        <a href="#introduzione">
+	                        	<i class="icon-chevron-right"></i>
+	                        	Introduzione
+	                    	</a>
+	                    </li>
+	                    <li>
+	                        <a href="#consuntivo">
+	                        	<i class="icon-chevron-right"></i>
+	                        	Consuntivo Ore
+	                        	</a>
+	                    </li>
+	                    <li>
+	                        <a href="#struttura">
+	                        	<i class="icon-chevron-right"></i>
+	                        	Struttura del Progetto
+	                        	</a>
+	                    </li>
+	                    <li>
+	                        <a href="#ptfissato">
+	                        	<i class="icon-chevron-right"></i>
+	                        	Trovare un Punto Fissato
+	                        	</a>
+	                    </li>
+	                    <li>
+	                        <a href="#angoli">
+	                        	<i class="icon-chevron-right"></i>
+	                        	Trovare Tutti gli Angoli
+	                        	</a>
+	                    </li>
+	                    <li>
+	                        <a href="#punti">
+	                        	<i class="icon-chevron-right"></i>
+	                        	Passare per Tutti i Punti
+	                        	</a>
+	                    </li>
+	                    <li>
+	                        <a href="#conclusioni">
+	                        	<i class="icon-chevron-right"></i>
+	                        	Conclusioni
+	                        	</a>
+	                    </li>
+	                </ul>
+	            </div>
+	            <div class="span9">
+		            <div id="introduzione">
+		                <h2>Introduzione</h2>
+		                <p>
+		                    Il progetto è stato realizzato nell'anno accademico 2012/2013 per il corso di Intelligenza Artificiale dell'Università degli Studi di Padova e si basa sul primo di una serie di progetti parzialmente implementati messi a disposizione dalla University of Califonia, Berkeley e disponibili alla pagina <a href="http://www-inst.eecs.berkeley.edu/~cs188/pacman/pacman.html">http://www-inst.eecs.berkeley.edu/~cs188/pacman/pacman.html</a>.
+		                    <br/>
+		                    Lo scopo di questo progetto è quello di implementare alcuni algoritmi di ricerca su grafi applicandoli a tre diversi problemi inerenti il mondo di Pac-man. In questo contesto Pac-Man si trova da solo in un labirinto di dimensioni e disposizione dei muri casuali e deve riuscire a mangiare tutto il cibo presente, collocato in modo diverso a seconda del particolare problema preso in esame.
+		                </p>
+		            </div>
+		            <div id="consuntivo">
+		                <h2>Consuntivo Ore</h2>
+		                <p>
+		                    Il progetto ha richiesto un totale di 50 ore complessive (25 ore a persona), suddivise nel seguente modo:
+		                </p>
+		                <table class="table">
+		                    <thead>
+		                        <tr>
+		                            <th>Fase</th>
+		                            <th>Ore</th>
+		                            <th>Descrizione</th>
+		                        </tr>
+		                    </thead>
+		                    <tbody>
+		                        <tr>
+		                            <th>Analisi dei requisiti</th><td>11</td><td>Studio di Python, studio della struttura del progetto e dei file da modificare.</td>
+		                        </tr>
+		                        <tr>
+		                            <th>Progettazione</th><td>20</td><td>Progettazione dell'implementazione degli algoritmi di ricerca su grafo, euristiche e strutture dati da utilizzare.</td>
+		                        </tr>
+		                        <tr>
+		                            <th>Programmazione</th><td>10</td><td>Implementazione algoritmi, euristiche e strutture dati.</td>
+		                        </tr>
+		                        <tr>
+		                            <th>Test e Raccolta Dati</th><td>4</td><td>Confronto tra i diversi algoritmi, tra le diverse euristiche considerando il tempo d'esecuzione, il costo del percorso trovato e il numero di nodi espansi.</td>
+		                        </tr>
+		                        <tr>
+		                            <th>Documentazione</th><td>5</td><td>Stesura relazione finale e presentazione.</td>
+		                        </tr>
+		                    </tbody>
+		                </table>
+		            </div>
+		            <div id="struttura">
+		                <h2>Struttura del Progetto</h2>
+		                
+		            </div>
+		            <div id="ptfissato">
+		                <h2>Trovare un Punto Fissato</h2>
+		                <p>
+		                    Il primo problema preso in considerazione consiste nel far raggiungere a Pac-man un punto fissato all’interno del labirinto tramite diversi algoritmi di ricerca visti a lezione, nello specifico: depth-first, breadth-first, costo uniforme e A*.
+		                    La rappresentazione dei nodi nel grafo di ricerca è data dalla funzione <code>getSuccessors</code> della classe <code>PositionSearchProblem</code>. Un nodo è rappresentato dalle coordinate x e y nel labirinto, dall'insieme di azioni e dal costo complessivo per arrivare a quello stato.
+		                    Si è deciso di implementare innanzitutto una funzione di ricerca generica che utilizzasse come frontiera una lista astratta, istanziata a seconda del caso specifico come una pila, una coda, o una coda con priorità.
+		                    La <code>genericSearch</code> è quindi definita come segue:
+		                </p>
+		                <pre>
+		def genericSearch(problem, frontiera, euristica=nullHeuristic):
+		    esplorati = []
+		    frontiera.push((problem.getStartState(), [] , 0), 0)
+		  
+		    while(not(frontiera.isEmpty())):
+		        stato, azioni, costo = frontiera.pop()
+		    
+		        if problem.isGoalState(stato):
+		            return azioni #soluzione corrispondente
+		    
+		        esplorati.append(stato)
+		        successori = problem.getSuccessors(stato)
+		    
+		        for statoSuccessore, azioneSuccessore, costoSuccessore in successori:
+		            nuovaAzione = azioni + [azioneSuccessore]
+		            nuovoCosto = costo + costoSuccessore #g(n)
+		            nodoSuccessore = (statoSuccessore, nuovaAzione, nuovoCosto)
+		            if statoSuccessore not in esplorati and not frontiera.contains(statoSuccessore, nuovoCosto):
+		                frontiera.push(nodoSuccessore, nuovoCosto + euristica(statoSuccessore, problem))
+		  
+		    return None
+		                </pre>
+		                <p>
+		                    Finché la frontiera non è vuota o non si raggiunge lo stato goal, viene estratto l’elemento successivo (in modo dipendente dal supporto di memorizzazione specifico), viene ricavata la lista dei successori del nodo corrente e quelli non ancora esplorati vengono aggiunti alla frontiera.
+		                    Le implementazioni degli algoritmi specifici risultano a questo punto triviali, in quanto è sufficiente istanziare il supporto di memorizzazione corretto.
+		                </p>
+		                <h3>Depth-first Search:</h3>
+		                <pre>
+		def depthFirstSearch(problem):
+		    "Search the deepest nodes in the search tree first"
+		    frontiera = util.Stack()
+		    return genericSearch(problem, frontiera)
+		                </pre>
+		                <p>
+		                La frontiera è implementata come una pila LIFO, in questo modo viene estratto sempre il nodo inserito per ultimo, il che realizza la visita del grafo in profondità. L'algoritmo è stato eseguito sui labirinti <code>tinyMaze</code>, <code>mediumMaze</code> e <code>bigMaze</code>. I risultati ottenuti sono i seguenti:
+		                </p>
+		                <table class="table">
+		                    <thead>
+		                        <tr>
+		                            <th>Layout</th>
+		                            <th>Tempo impiegato (s)</th>
+		                            <th>Nodi espansi</th>
+		                            <th>Costo percorso</th>
+		                        </tr>
+		                    </thead>
+		                    <tbody>
+		                        <tr>
+		                            <td>tinyMaze</td>
+		                            <td>0.0</td>
+		                            <td>15</td>
+		                            <td>10</td>
+		                        </tr>
+		                        <tr>
+		                            <td>mediumMaze</td>
+		                            <td>0.0</td>
+		                            <td>146</td>
+		                            <td>130</td>
+		                        </tr>
+		                        <tr>
+		                            <td>bigMaze</td>
+		                            <td>0.1</td>
+		                            <td>390</td>
+		                            <td>210</td>
+		                        </tr>
+		                    </tbody>
+		                </table>
+		                <h3>Breadth-first Search:</h3>
+		                <pre>
+		def breadthFirstSearch(problem):
+		    "Search the shallowest nodes in the search tree first."
+		    frontiera = util.Queue()
+		    return genericSearch(problem, frontiera)
+		                </pre>
+		                <p>
+		                La frontiera è implementata come una coda FIFO, in questo modo viene estratto sempre il nodo inserito per primo, il che realizza la visita del grafo in ampiezza. L'algoritmo è stato eseguito sui labirinti <code>tinyMaze</code>, <code>mediumMaze</code> e <code>bigMaze</code>. I risultati ottenuti sono i seguenti:
+		                </p>
+		                <table class="table">
+		                    <thead>
+		                        <tr>
+		                            <th>Layout</th>
+		                            <th>Tempo impiegato (s)</th>
+		                            <th>Nodi espansi</th>
+		                            <th>Costo percorso</th>
+		                        </tr>
+		                    </thead>
+		                    <tbody>
+		                        <tr>
+		                            <td>tinyMaze</td>
+		                            <td>0.0</td>
+		                            <td>15</td>
+		                            <td>8</td>
+		                        </tr>
+		                        <tr>
+		                            <td>mediumMaze</td>
+		                            <td>0.0</td>
+		                            <td>269</td>
+		                            <td>68</td>
+		                        </tr>
+		                        <tr>
+		                            <td>bigMaze</td>
+		                            <td>0.1</td>
+		                            <td>620</td>
+		                            <td>210</td>
+		                        </tr>
+		                    </tbody>
+		                </table>
+		                <h3>Uniform Cost Search:</h3>
+		                <pre>
+		def uniformCostSearch(problem):
+		    "Search the node of least total cost first."
+		    frontiera = util.PriorityQueue()
+		    return genericSearch(problem, frontiera)
+		                </pre>
+		                <p>
+		                La frontiera è implementata come una coda con priorità, in questo modo viene estratto per primo sempre il nodo con priorità più alta. L'algoritmo è stato eseguito sui labirinti <code>mediumMaze</code> come tutti gli altri algoritmi. Inoltre è stato testato sul labirinto <code>mediumDottedMaze</code> con agente <code>StayEastSearchAgent</code>, che penalizza i passi verso la parte sinistra del labirinto, e sul labirinto <code>mediumScaryMaze</code> con agente <code>StayWestSearchAgent</code> che penalizza i passi verso la parte destra del labirinto. I risultati ottenuti sono i seguenti:
+		                </p>
+		                <table class="table">
+		                    <thead>
+		                        <tr>
+		                            <th>Layout</th>
+		                            <th>Tempo impiegato (s)</th>
+		                            <th>Nodi espansi</th>
+		                            <th>Costo percorso</th>
+		                        </tr>
+		                    </thead>
+		                    <tbody>
+		                        <tr>
+		                            <td>mediumMaze</td>
+		                            <td>0.0</td>
+		                            <td>268</td>
+		                            <td>68</td>
+		                        </tr>
+		                        <tr>
+		                            <td>mediumDottedMaze</td>
+		                            <td>0.0</td>
+		                            <td>190</td>
+		                            <td>1</td>
+		                        </tr>
+		                        <tr>
+		                            <td>mediumScaryMaze</td>
+		                            <td>0.0</td>
+		                            <td>108</td>
+		                            <td>68719479864</td>
+		                        </tr>
+		                    </tbody>
+		                </table>
+		                <p>
+		                	Il costo dei percorsi trovati dall'agente <code>StayEastSearchAgent</code> e <code>StayWestSearchAgent</code> è molto basso nel primo caso e molto alto nel secondo, a causa delle loro funzioni di costo. Il primo infatti eleva 0.5 al valore della coordinata x (maggiore è il valore di x, minore è il costo), rendendo la somma dei costi sempre minore di 1. Il secondo invece eleva 2 al valore della coordinata x, in questo modo maggiore è il valore di x, maggiore è il costo.
+	                	</p> 
+		                <h3>A* Search:</h3>
+		                <pre>
+		def aStarSearch(problem, heuristic=nullHeuristic):
+		    "Search the node that has the lowest combined cost and heuristic first."
+		    frontiera = util.PriorityQueue()
+		    return genericSearch(problem, frontiera, heuristic)
+		                </pre>
+		                <p>
+		                La frontiera è implementata come una coda con priorità, in cui la priorità è data dall'euristica passata all'algoritmo. L'algoritmo è stato eseguito sui labirinti <code>mediumMaze</code> come tutti gli altri algoritmi. Inoltre è stato testato sul labirinto <code>bigMaze</code> con euristica nulla e con la distanza di Manhattan. Quest'ultima restituisce la somma dei valori assoluti delle differenze tra le coordinate dello stato corrente e del goal. I risultati ottenuti sono i seguenti:
+		                </p>
+		                <table class="table">
+		                    <thead>
+		                        <tr>
+		                            <th>Layout</th>
+		                            <th>Euristica</th>
+		                            <th>Tempo impiegato (s)</th>
+		                            <th>Nodi espansi</th>
+		                            <th>Costo percorso</th>
+		                        </tr>
+		                    </thead>
+		                    <tbody>
+		                        <tr>
+		                            <td>mediumMaze</td>
+		                            <td>Manhattan Distance</td>
+		                            <td>0.0</td>
+		                            <td>221</td>
+		                            <td>68</td>
+		                        </tr>
+		                        <tr>
+		                            <td>bigMaze</td>
+		                            <td>Null</td>
+		                            <td>0.1</td>
+		                            <td>619</td>
+		                            <td>210</td>
+		                        </tr>
+		                        <tr>
+		                            <td>bigMaze</td>
+		                            <td>Manhattan Distance</td>
+		                            <td>0.1</td>
+		                            <td>538</td>
+		                            <td>210</td>
+		                        </tr>
+		                    </tbody>
+		                </table>
+		                <p>
+		                Si può notare come in mancanza di un euristica, l'algoritmo diventa esattamente la ricerca con costi uniformi. Utilizzando la distanza di Manhattan invece si nota come l'algoritmo riesca a trovare una soluzione pià velocemente. Questo tipo di euristica è ammissibile e consistente pertanto trova sempre la soluzione ottima. L'ammissibilità deriva dal fatto che non sovrastima mai il costo della soluzione ottima, essendo la distanza di Manhattan il minor numero di passi per raggiungere un punto in assenza di muri. La consistenza invece è verificata poichè ogni passo ha costo 1 ed ogni passo avvicina al più di 1 Pac-man al cibo: la disequazione h(n) &le; h(n') + 1 è pertanto vera.
+	                	</p>
+		                <p>
+		                	Prendendo come metodo di confronto i dati ottenuti sul <code>mediumMaze</code> è evidente che tra questi algoritmi, a "vincere" è A* con euristica distanza di Manhattan, espandendo 221 nodi. L'algoritmo Depth-first infatti trova la soluzione espandendo solo 146 nodi, ma non riesce a trovare quella ottima, essendo il costo del percorso trovato 130. 
+	                	</p>
+		            </div>
+		            <div id="angoli">
+		            	<h2>Trovare Tutti gli Angoli</h2>
+		            </div>
+            	</div>
+            </div>
+    	</div>
+    </body>
+</html>
