@@ -26,6 +26,8 @@
             <div class="row-fluid">
 	            <div class="span3 bs-docs-sidebar indice">
 	                <ul class="nav nav-list bs-docs-sidenav affix-top">
+	                <!--con solo affix l'indice è sempre sullo schermo anche durante lo scroll, 
+	                	con affix-top l'indice è fisso nel punto della pagina -->	
 	                    <li>
 	                        <a href="#introduzione">
 	                        	<i class="icon-chevron-right"></i>
@@ -113,7 +115,86 @@
 		            </div>
 		            <div id="struttura">
 		                <h2>Struttura del Progetto</h2>
-		                
+		                <p>
+		                	Il codice del progetto si trova all’interno della cartella <strong>/search</strong>.Al suo interno si trovano la cartella <strong>/layout</strong> che contiene le strutture dei labirinti con le posizioni dei cibi e la posizione iniziali di Pacman, e una serie di file Python che costituiscono il cuore del gioco.
+		                	<br />
+		                	I file riguardanti la grafica non sono stati usati per lo svolgimento del progetto e sono:
+		                	
+		                	<table class="table">
+		                    <thead>
+		                        <tr>
+		                            <th>Nome File</th>
+		                            <th>Descrizione</th>
+		                        </tr>
+		                    </thead>
+		                    <tbody>
+		                        <tr>
+		                            <td>graphicDisplay.py</td><td>grafica per PacMan</td>
+		                        </tr>
+		                        <tr>
+		                            <td>graphicUtil.py</td><td>supporto per la grafica</td>
+		                        </tr>
+		                        <tr>
+		                            <td>textDisplay.py</td><td>grafica ASCII per PacMan</td>
+		                        </tr>
+		                        <tr>
+		                            <td>ghostAgents.py</td><td>agenti per controllare i fantasmi</td>
+		                        </tr>
+		                        <tr>
+		                            <td>keyboardAgents.py</td><td>interfaccia per controllare PacMan con la tastiera</td>
+		                        </tr>
+		                        <tr>
+		                            <td>layout.py</td><td>codice per leggere i file contenuti in <strong>/layout</strong> </td>
+		                        </tr>
+		                    </tbody>
+		                </table>	
+		                I file che è stato necessario comprendere ai fini dello svolgimento del problema sono i seguenti:
+		                	<table class="table">
+		                    <thead>
+		                        <tr>
+		                            <th>Nome File</th>
+		                            <th>Descrizione</th>
+		                        </tr>
+		                    </thead>
+		                    <tbody>
+		                        <tr>
+		                            <td>pacman.py</td><td>File principale che esegue il gioco; in particolare è stato necessario prestare attentione al tipo GameState</td>
+		                        </tr>
+		                        <tr>
+		                            <td>game.py</td><td>Contiene la logica del mondo di Pacman</td>
+		                        </tr>
+		                        <tr>
+		                            <td>util.py</td><td>Contiene le strutture dati utili per l’implementazione degli algoritmi di ricerca</td>
+		                        </tr>
+		                   </tbody>
+		                </table>
+		            I file che contengono il nostro lavoro sul progetto sono:
+		            <table class="table">
+		                    <thead>
+		                        <tr>
+		                            <th>Nome File</th>
+		                            <th>Descrizione</th>
+		                        </tr>
+		                    </thead>
+		                    <tbody>
+		                        <tr>
+		                            <td>search.py</td><td>Contiene l’implememtazione di tutti gli algoritmi di ricerca</td>
+		                        </tr>
+		                        <tr>
+		                            <td>searchAgents.py</td><td>Contiene l’implementazione di tutti gli agenti</td>
+		                        </tr>
+		                        
+		                   </tbody>
+		                </table>
+		               </p> 
+		               <h3>Come avviare il gioco</h3>
+		               <p>
+		               	Il gioco si avvia sempre tramite riga di comando. È possibile controllare Pacman con la tastiera (e quindi giocare al gioco vero e proprio) con il seguente comando:
+		               <pre>python pacman.py   (1)</pre>
+		               Nel corso del progetto è stato necessario utilizzare diversi tipi di layout, algoritmo (con euristica per quelli che ne utilizzano una), agenti in base al problema considerato. Tali cambiamenti vengono attuati via riga di comando specificando le opzioni  dopo  (1); la lista delle opzioni è elencata eseguendo
+		               <pre>python pacman.py –h</pre>
+		               Tutti i comandi che sono stati utilizzati nel progetto sono contenuti in <strong>/search/command.txt</strong>.
+		               </p>
 		            </div>
 		            <div id="ptfissato">
 		                <h2>Trovare un Punto Fissato</h2>
@@ -326,6 +407,142 @@
 		            </div>
 		            <div id="angoli">
 		            	<h2>Trovare Tutti gli Angoli</h2>
+		            	<h3>Struttura del problema</h3>
+		            	<p>
+		            		In questo nuovo problema vengono utilizzati i layout cornerMazes; questi contengono 4 puntini, uno in ogni angolo del labirinto e PacMan, attraverso gli algoritmi di ricerca, deve essere in grado di trovare il percorso più breve attraverso il labirinto che tocchi tutti e quattro gli angoli.		            		
+		            		La rappresentazione degli stati scelta per questo problema è la seguente:
+		            		<br /><br />
+		            		(posizione corrente di PacMan, angoli già visitati).
+		            		<br /><br />
+		            		Tale rappresentazione è nata dopo lo studio attento dei problemi già implementati all’interno del file searchAgents.py ed utilizza le sole parti del GameState che sono necessarie, come indicatoci dalla consegna (sebbene ciò comporti allo stato di “ricordarsi” degli angoli visitati in precedenza.
+Quindi lo stato iniziale è (posizione iniziale di PacMan, angoli visitati), dove in angoli visitati ci sarà la posizione iniziale di pacman se questa è un angolo, altrimenti è vuoto.
+								<pre>self.statoIniziale = (self.startingPosition, angoliVisitati)</pre>
+							Il controllo per lo stato goal consiste nel confrontare l’insieme degli angoli del problema con l’insieme degli angoli visitati. Se i due insiemi sono uguali, allora lo stato è uno stato goal.
+		            		<pre>def isGoalState(self, state):     
+    return set(state[1]) == set(self.corners) </pre>
+    						La funzione sucessore, invece, ritorna gli stati sucessori come un insieme di triple (così come indicatoci nella consegna); ciascuna tripla è composta da:
+    						<ul>
+    							<li>prossimo stato</li>
+    							<li>l’azione fatta da pacMan per raggiungere quello stato, ovvero il punto cardinale verso cui si è mosso</li>
+    							<li>il costo dell’azione per raggiungere quello stato (che è 1)</li>
+    						</ul>
+    						
+    						Ciascuna tripla è costruita come segue:
+    						<ol>
+    							<li>a partire dalla posizione di pacman, si calcola la nuova posizione in cui pacman sarebbe se si spostasse di una casella seguendo uno dei quattro punti cardinali.</li>
+    							<li>se tale nuova posizione è valida (ovvero non è un muro), allora costruisce la tripla descritta sopra, aggiornando l’insieme degli angoli visitati per il prossimo stato se la nuova posizione è un angolo non ancora visitato.</li>
+    							<li>si ripetono queste operazioni per ciascun punto cardinale.</li>
+    						</ol>
+    						
+    						<pre>def getSuccessors(self, state):
+    successors = []
+    for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
+         x,y = state[0]
+         dx, dy = Actions.directionToVector(action)
+         prossimaPosizione = nextx, nexty = int(x + dx), int(y + dy)
+         hitsWall = self.walls[nextx][nexty]
+
+         if not hitsWall:
+             angoliVisitati = set(state[1])
+             if prossimaPosizione in self.corners and prossimaPosizione not in angoliVisitati:
+                 angoliVisitati.add(prossimaPosizione)
+             prossimoStato = (prossimaPosizione, angoliVisitati)
+             costoAzione = self.costFn(prossimoStato)
+             successors.append( (prossimoStato , action, costoAzione) )             
+    
+    self._expanded += 1
+    return successors</pre>
+    Tale problema è implementato nel file <strong>searchAgents.py</strong>, nella classe <code>CornersProblem</code>, seguendo la struttura e le firme dei metodi a disposizione. Le funzioni che sono state da noi implementate sono il costruttore, <code>getStartState</code>, <code>isGoalState</code>, <code>getSuccessors</code>.
+		            	</p>
+		   <h3>Euristica</h3>
+		   <p>
+		   	La seconda consegna richiedeva l’implementazione di una euristica per poter risolvere il problema utilizzando l’algoritmo A*. è richiesto che l’euristica sia ammissibile.
+		   	L’euristica scelta si comporta come segue:
+		   	<ol>
+		   		<li>Tra gli angoli che Pacman non ha ancora visitato, si sceglie quello più vicino alla posizione corrente di pacman e si memorizza la distanza.</li>
+		   		<li>Dopo di che si sceglie l’angolo più vicino (non ancora visitato) all’angolo scelto al punto 1 e si somma la distanza tra questi due angoli a quella memorizzata al punto.</li>
+		   		<li>Per ciascun angolo non ancora visitato, si sceglie quello più vicino rispetto all’angolo considerato subito prima e si sommano le distanze tra queste coppie di angoli.</li>
+		   		<li>La somma tra le distanze è ritornata </li>
+		   	</ol>
+		   	Tale euristica è ammissibile in quanto si tratta della soluzione del problema rilassato in cui pacman si trova in un labirinto senza muri. È soluzione in quanto pacman, dopo aver raggiunto l’angolo più vicino alla sua posizione iniziale segue il perimetro per poter visitare tutti gli altri angoli.
+		   </p>
+		   
+		   <h3>Test</h3>
+		   <p>Al fine di verificare se la nostra rappresentazione degli stati era corretta, abbiamo seguito il test proposto nella consegna. Tale consiste nell’ eseguire i due comandi sottostanti; la rappresentazione del problema doveva far si che l’agente riuscisse a risolvere con successo i due problemi lanciati.</p>
+		   <pre>python pacman.py -l tinyCorners -p SearchAgent –a fn=bfs,prob=CornersProblem</pre>
+		   <pre>python pacman.py -l mediumCorners -p SearchAgent -a fn=bfs,prob=CornersProblem </pre>
+		   La nostra rappresentazione risolve correttamente i due problemi.
+		   <br />
+		   L’euristica invece è stata testata utilizzando tre tipi di distanze: la disanza di manhattan, la distanza euclidea e la distanza di Chebyshev. Il confronto tra i dati ottenuti ci sottolinea come la distanza Manhattan sia dominante nei confronti delle altre due, mentre la distanza euclidea è dominante solo sulla distanza di Chebyshev 
+		   <br />
+		   I dati ottenuti con il layout <code>mediumCorners</code> sono i seguenti:
+		   <table class="table">
+		                    <thead>
+		                        <tr>
+		                            <th>Euristica</th>
+		                            <th>Tempo impiegato (s)</th>
+		                            <th>Nodi espansi</th>
+		                            <th>Costo percorso</th>
+		                        </tr>
+		                    </thead>
+		                    <tbody>
+		                        <tr>
+		                            <td>Manhattan Distance</td>
+		                            <td>0.1</td>
+		                            <td>106</td>
+		                            <td>755</td>
+		                        </tr>
+		                        <tr>
+		                            <td>Euclidean Distance</td>
+		                            <td>0.1</td>
+		                            <td>106</td>
+		                            <td>818</td>
+		                        </tr>
+		                        <tr>
+		                            <td>Chebyshev Distance</td>
+		                            <td>0.2</td>
+		                            <td>106</td>
+		                            <td>888</td>
+		                        </tr>
+		                    </tbody>
+		                </table>
+		   
+		   I dati ottenuti con il layout <code>bigCorners</code> sono i seguenti:
+		   <table class="table">
+		                    <thead>
+		                        <tr>
+		                            <th>Euristica</th>
+		                            <th>Tempo impiegato (s)</th>
+		                            <th>Nodi espansi</th>
+		                            <th>Costo percorso</th>
+		                        </tr>
+		                    </thead>
+		                    <tbody>
+		                        <tr>
+		                            <td>Manhattan Distance</td>
+		                            <td>0.4</td>
+		                            <td>162</td>
+		                            <td>1813</td>
+		                        </tr>
+		                        <tr>
+		                            <td>Euclidean Distance</td>
+		                            <td>0.5</td>
+		                            <td>162</td>
+		                            <td>2044</td>
+		                        </tr>
+		                        <tr>
+		                            <td>Chebyshev Distance</td>
+		                            <td>0.6</td>
+		                            <td>162</td>
+		                            <td>2296</td>
+		                        </tr>
+		                    </tbody>
+		                </table>
+		   <br />
+		   Per risolvere il problema degli angoli con A* e la nostra euristica è sufficiente eseguire questo comando: 
+		   <pre>python pacman.py -l mediumCorners -p AStarCornersAgent -z 0.5</pre>
+		   
+		            
 		            </div>
             	</div>
             </div>
