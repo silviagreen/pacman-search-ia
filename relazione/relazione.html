@@ -25,9 +25,8 @@
 			</div>
 			<div class="row-fluid">
 				<div class="span3 bs-docs-sidebar indice">
-					<ul class="nav nav-list bs-docs-sidenav affix-top">
-						﻿ <!--con solo affix l'indice è sempre sullo schermo anche durante lo scroll,
-						con affix-top l'indice è fisso nel punto della pagina -->
+					<ul data-spy="affix" data-offset-top="300" data-offset-bottom="0" class="nav nav-list bs-docs-sidenav affix-top">
+						﻿
 						<li>
 							<a href="#introduzione"> <i class="icon-chevron-right"></i> Introduzione </a>
 						</li>
@@ -132,13 +131,13 @@
 								</thead>
 								<tbody>
 									<tr>
-										<td>pacman.py</td><td>File principale che esegue il gioco; in particolare è stato necessario prestare attentione al tipo GameState</td>
+										<td>pacman.py</td><td>file principale che esegue il gioco; in particolare è stato necessario prestare attentione al tipo GameState</td>
 									</tr>
 									<tr>
-										<td>game.py</td><td>Contiene la logica del mondo di Pac-man</td>
+										<td>game.py</td><td>contiene la logica del mondo di Pac-man</td>
 									</tr>
 									<tr>
-										<td>util.py</td><td>Contiene le strutture dati utili per l’implementazione degli algoritmi di ricerca</td>
+										<td>util.py</td><td>contiene le strutture dati utili per l’implementazione degli algoritmi di ricerca</td>
 									</tr>
 								</tbody>
 							</table>
@@ -151,17 +150,17 @@
 								</thead>
 								<tbody>
 									<tr>
-										<td>search.py</td><td>Contiene l’implememtazione di tutti gli algoritmi di ricerca</td>
+										<td>search.py</td><td>contiene l’implememtazione di tutti gli algoritmi di ricerca</td>
 									</tr>
 									<tr>
-										<td>searchAgents.py</td><td>Contiene l’implementazione di tutti gli agenti</td>
+										<td>searchAgents.py</td><td>contiene l’implementazione di tutti gli agenti</td>
 									</tr>
 								</tbody>
 							</table>
 						</p><h3>Come avviare il gioco</h3>
 						<p>
-							Il gioco si avvia sempre tramite riga di comando. È possibile controllare Pac-man con la tastiera (e quindi giocare al gioco vero e proprio) con il seguente comando: 							<pre>python pacman.py           (1)</pre>
-							Nel corso del progetto è stato necessario utilizzare diversi tipi di layout, algoritmo (con euristica per quelli che ne utilizzano una), agenti in base al problema considerato. Tali cambiamenti vengono attuati via riga di comando specificando le opzioni  dopo  (1); la lista delle opzioni è elencata eseguendo 							<pre>python pacman.py –h</pre>
+							Il gioco si avvia sempre tramite riga di comando. È possibile controllare Pac-man con la tastiera (e quindi permettere ad un utente di poter effetivamente giocare) con il seguente comando: 							<pre>python pacman.py</pre>
+							Nel corso del progetto è stato necessario utilizzare diversi tipi di layout, algoritmo (con euristica per quelli che ne utilizzano una), agenti in base al problema considerato. Tali cambiamenti vengono attuati via riga di comando specificando le opzioni  dopo  il comando sopra; la lista delle opzioni è elencata eseguendo 							<pre>python pacman.py –h</pre>
 							Tutti i comandi che sono stati utilizzati nel progetto sono contenuti in <code>/search/command.txt</code>.
 						</p>
 					</div>
@@ -379,7 +378,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 						<h2>Trovare Tutti gli Angoli</h2>
 						<h3>Struttura del problema</h3>
 						<p>
-							In questo nuovo problema vengono utilizzati i layout cornerMazes; questi contengono 4 cibi, uno in ogni angolo del labirinto e Pac-man, attraverso gli algoritmi di ricerca, deve essere in grado di trovare il percorso più breve attraverso il labirinto che tocchi tutti e quattro gli angoli. La rappresentazione degli stati scelta per questo problema è la seguente:
+							In questo secondo problema vengono utilizzati i layout cornerMazes; questi contengono 4 cibi, uno in ogni angolo del labirinto e Pac-man, attraverso gli algoritmi di ricerca, deve essere in grado di trovare il percorso più breve attraverso il labirinto che tocchi tutti e quattro gli angoli. La rappresentazione degli stati scelta per questo problema è la seguente:
 						</p>
 							<pre>
 (posizione corrente di Pac-man, angoli già visitati)
@@ -444,7 +443,8 @@ def getSuccessors(self, state):
 						</p>
 						<h3>Euristica</h3>
 						<p>
-							La seconda consegna richiedeva l’implementazione di una euristica per poter risolvere il problema utilizzando l’algoritmo A*. è richiesto che l’euristica sia ammissibile.L’euristica scelta si comporta come segue:
+							Al fine di poter risolvere il problema utilizzando l’algoritmo A*, si è provveduto a definire e implementare un'euristica ammissibile.
+		   	L’euristica scelta si comporta come segue:
 							<ol>
 								<li>
 									Tra gli angoli che Pac-man non ha ancora visitato, si sceglie quello più vicino alla posizione corrente di Pac-man e si memorizza la distanza.
@@ -645,4 +645,11 @@ che è sempre vera. Pertanto la condizione di consistenza è verificata in ogni 
 			</div>﻿
 		</div>
 	</body>
+	<script src="js/jquery.js"></script>
+   
+  
+   
+    <script src="js/bootstrap-scrollspy.js"></script>
+   
+    <script src="js/bootstrap-affix.js"></script>
 </html>
