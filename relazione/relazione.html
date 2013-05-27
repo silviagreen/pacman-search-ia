@@ -381,10 +381,10 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 							In questo secondo problema vengono utilizzati i layout cornerMazes; questi contengono 4 cibi, uno in ogni angolo del labirinto e Pac-Man, attraverso gli algoritmi di ricerca, deve essere in grado di trovare il percorso più breve attraverso il labirinto che tocchi tutti e quattro gli angoli. La rappresentazione degli stati scelta per questo problema è la seguente:
 						</p>
 							<pre>
-(posizione corrente di Pac-Man, angoli già visitati)
+<em>(posizione corrente di Pac-Man, angoli già visitati)</em>
 </pre>
 						<p>
-							Tale rappresentazione è nata dopo lo studio attento dei problemi già implementati all’interno del file searchAgents.py ed utilizza le sole parti del GameState che sono necessarie, come indicatoci dalla consegna (sebbene ciò comporti allo stato di “ricordarsi” degli angoli visitati in precedenza. Quindi lo stato iniziale è (posizione iniziale di Pac-Man, angoli visitati), dove in angoli visitati ci sarà la posizione iniziale di Pac-Man se questa è un angolo, altrimenti è vuoto.
+							Tale rappresentazione è nata dopo lo studio attento dei problemi già implementati all’interno del file <code>searchAgents.py</code> ed utilizza le sole parti del <code>GameState</code> che sono necessarie, come indicatoci dalla consegna (sebbene ciò comporti allo stato di “ricordarsi” degli angoli visitati in precedenza). Quindi lo stato iniziale è <em>(posizione iniziale di Pac-Man, angoli visitati)</em>, dove in <em>angoli visitati</em> ci sarà la posizione iniziale di Pac-Man se questa è un angolo, altrimenti è vuoto.
 						</p>
 <pre>self.statoIniziale = (self.startingPosition, angoliVisitati)</pre>
 						<p>
@@ -409,10 +409,10 @@ def isGoalState(self, state):
 							Ciascuna tripla è costruita come segue:
 							<ol>
 								<li>
-									a partire dalla posizione di Pac-Man, si calcola la nuova posizione in cui Pac-Man sarebbe se si spostasse di una casella seguendo uno dei quattro punti cardinali.
+									a partire dalla posizione corrente di Pac-Man, si calcola la nuova posizione in cui Pac-Man sarebbe se si spostasse di una cella seguendo uno dei quattro punti cardinali.
 								</li>
 								<li>
-									se tale nuova posizione è valida (ovvero non è un muro), allora costruisce la tripla descritta sopra, aggiornando l’insieme degli angoli visitati per il prossimo stato se la nuova posizione è un angolo non ancora visitato.
+									se tale nuova posizione è valida (ovvero non è un muro), allora si costruisce la tripla descritta sopra, aggiornando l’insieme degli angoli visitati per il prossimo stato se la nuova posizione è un angolo non ancora visitato.
 								</li>
 								<li>
 									si ripetono queste operazioni per ciascun punto cardinale.
@@ -443,14 +443,14 @@ def getSuccessors(self, state):
 						</p>
 						<h3>Euristica</h3>
 						<p>
-							Al fine di poter risolvere il problema utilizzando l’algoritmo A*, si è provveduto a definire e implementare un'euristica ammissibile.
+							Al fine di poter risolvere il problema utilizzando l’algoritmo A*, si è provveduto a definire e implementare un'euristica ammissibile (come richiestoci dalla consegna).
 		   	L’euristica scelta si comporta come segue:
 							<ol>
 								<li>
 									Tra gli angoli che Pac-Man non ha ancora visitato, si sceglie quello più vicino alla posizione corrente di Pac-Man e si memorizza la distanza.
 								</li>
 								<li>
-									Dopo di che si sceglie l’angolo più vicino (non ancora visitato) all’angolo scelto al punto 1 e si somma la distanza tra questi due angoli a quella memorizzata al punto.
+									Dopo di che si sceglie l’angolo più vicino (non ancora visitato) all’angolo scelto al punto 1 e si somma la distanza tra questi due angoli a quella memorizzata al punto 1.
 								</li>
 								<li>
 									Per ciascun angolo non ancora visitato, si sceglie quello più vicino rispetto all’angolo considerato subito prima e si sommano le distanze tra queste coppie di angoli.
@@ -564,9 +564,9 @@ python pacman.py -l mediumCorners -p SearchAgent -a fn=bfs,prob=CornersProblem <
 							Quest'ultimo problema richiede di far mangiare a Pac-Man tutto il cibo presente nel labirinto nel minor numero di passi possibile. La quantità e la disposizione del cibo sono casuali. Il problema è codificato nella classe <code>FoodSearchProblem</code> del file <code>searchAgents.py</code>. Uno stato del grafo di ricerca è rappresentato dalla coppia:
 						</p>
 							<pre>
-(posizione di Pac-Man, griglia del cibo)								
+<em>(posizione di Pac-Man, griglia del cibo)</em>								
 </pre>
-						<p> dove la griglia del cibo è un array a 2 dimensioni di booleani rappresentante il labirinto, in cui un singolo elemento è a true se in quella posizione (x,y) è presente del cibo. La richiesta è pertanto quella di costruire un'euristica ammissibile e consistente per l'algoritmo A* che riesca a trovare la soluzione ottima.
+						<p> dove la <em>griglia del cibo</em> è un array a 2 dimensioni di booleani rappresentante il labirinto, in cui un singolo elemento è a true se in quella posizione (x,y) è presente del cibo. La richiesta è pertanto quella di costruire un'euristica ammissibile e consistente per l'algoritmo A* che riesca a trovare la soluzione ottima.
 						</p>
 						<p>
 							La nostra idea inizialmente è stata quella di usare un'euristica simile a quella del problema precedente, che memorizzasse cioè di volta in volta la distanza minore tra Pac-Man ed ogni cibo rimanente e sommasse queste distanze. Purtroppo un'euristica di questo tipo non è ammissibile per questo problema perchè ad esempio nel seguente layout cercherebbe prima di mangiare il cibo più vicino subito sulla destra, poi tornerebbe a sinistra e infine mangerebbe l'ultimo cibo in fondo a destra, sovrastimando così il costo della soluzione ottima (che consiste invece nel raggiungere prima l'angolo di sinistra e poi quello di destra).
@@ -580,8 +580,8 @@ python pacman.py -l mediumCorners -p SearchAgent -a fn=bfs,prob=CornersProblem <
 						<pre>
 python pacman.py -l trickySearch -p AStarFoodSearchAgent</pre>
 						<p>
-							otteniamo la soluzione ottima di costo 60 con 1452 nodi espansi ed un tempo di 24.4 secondi.
-						</p>
+							otteniamo la soluzione ottima di costo 60 con 726 nodi espansi ed un tempo di 10.9 secondi.
+						</p> <!-- 1452 nodi espansi in  24.4 sec-->
 						<h3>Dimostrazione</h3>
 						<p>
 							Vediamo ora perchè l'euristica è consistente. Definiamo:

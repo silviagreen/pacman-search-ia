@@ -537,7 +537,7 @@ class FoodSearchProblem:
     self.heuristicInfo = {} # A dictionary for the heuristic to store information
     
     # For display purposes
-    self._visited, self._visitedlist, self._expanded = {}, [], 0
+    #self._visited, self._visitedlist, self._expanded = {}, [], 0
       
   def getStartState(self):
     return self.start
@@ -545,12 +545,12 @@ class FoodSearchProblem:
   def isGoalState(self, state):
       isGoal = state[1].count() == 0
        # For display purposes only
-      if isGoal:
-       self._visitedlist.append(state[0])
-       import __main__
-       if '_display' in dir(__main__):
-         if 'drawExpandedCells' in dir(__main__._display): #@UndefinedVariable
-           __main__._display.drawExpandedCells(self._visitedlist) #@UndefinedVariable
+      #if isGoal:
+       #self._visitedlist.append(state[0])
+#        import __main__
+#        if '_display' in dir(__main__):
+#          if 'drawExpandedCells' in dir(__main__._display): #@UndefinedVariable
+#            __main__._display.drawExpandedCells(self._visitedlist) #@UndefinedVariable
       return isGoal
 
   def getSuccessors(self, state):
@@ -567,10 +567,10 @@ class FoodSearchProblem:
         successors.append( ( ((nextx, nexty), nextFood), direction, 1) )
         
       # Bookkeeping for display purposes
-    self._expanded += 1 
-    if state not in self._visited:
-      self._visited[state[0]] = True
-      self._visitedlist.append(state[0])
+#     self._expanded += 1 
+#     if state not in self._visited:
+#       self._visited[state[0]] = True
+#       self._visitedlist.append(state[0])
     return successors
 
   def getCostOfActions(self, actions):
@@ -593,7 +593,7 @@ class AStarFoodSearchAgent(SearchAgent):
     self.searchFunction = lambda prob: search.aStarSearch(prob, foodHeuristic)
     self.searchType = FoodSearchProblem
 
-def foodHeuristicMY(state, problem):
+def foodHeuristic____(state, problem):
   """
   Your heuristic for the FoodSearchProblem goes here.
   
@@ -620,8 +620,42 @@ def foodHeuristicMY(state, problem):
   """
   position, foodGrid = state
   "*** YOUR CODE HERE ***"
-  return foodGrid.count()
+  #return foodGrid.count()
   #return 0
+  
+   
+  foodsList=foodGrid.asList()
+  distBetweenExtremeFoods = 0
+  distPositionToClosestFood = None
+  for food1 in foodsList:
+    for food2 in foodsList:
+      if (food1, food2) in problem.heuristicInfo:
+        if problem.heuristicInfo[(food1, food2)] > distBetweenExtremeFoods:
+          distBetweenExtremeFoods = problem.heuristicInfo[(food1, food2)]
+      elif (food2, food1) in problem.heuristicInfo:
+        if problem.heuristicInfo[(food2, food1)] > distBetweenExtremeFoods:
+          distBetweenExtremeFoods = problem.heuristicInfo[(food2, food1)]
+      else:
+        problem.heuristicInfo[(food1, food2)] = mazeDistance(food1, food2, problem.startingGameState)
+        if problem.heuristicInfo[(food1, food2)] > distBetweenExtremeFoods:
+          distBetweenExtremeFoods = problem.heuristicInfo[(food1, food2)]
+  for food in foodsList:
+    if (position, food) in problem.heuristicInfo:
+      if distPositionToClosestFood == None or distPositionToClosestFood > problem.heuristicInfo[(position, food)]:
+        distPositionToClosestFood = problem.heuristicInfo[(position, food)]
+    elif (food, position) in problem.heuristicInfo:
+      if distPositionToClosestFood == None or distPositionToClosestFood > problem.heuristicInfo[(food, position)]:
+        distPositionToClosestFood = problem.heuristicInfo[(food, position)]
+    else:
+      problem.heuristicInfo[(position, food)] = mazeDistance(position, food, problem.startingGameState)
+      if distPositionToClosestFood == None or distPositionToClosestFood > problem.heuristicInfo[(position, food)]:
+        distPositionToClosestFood = problem.heuristicInfo[(position, food)]
+  if distPositionToClosestFood == None:
+    distPositionToClosestFood = 0      
+  heuristicValue = distBetweenExtremeFoods + distPositionToClosestFood
+  
+
+  return heuristicValue
   
 """
 DATABASE DI PATTERN DISGIUNTI
