@@ -461,6 +461,26 @@ def getSuccessors(self, state):
 							</ol>
 							Tale euristica è ammissibile in quanto si tratta della soluzione del problema rilassato in cui Pac-man si trova in un labirinto senza muri. È soluzione in quanto Pac-man, dopo aver raggiunto l’angolo più vicino alla sua posizione iniziale segue il perimetro per poter visitare tutti gli altri angoli.
 						</p>
+						<pre>def cornersHeuristic(state, problem):
+    prossimoAng, distanza = prossimoAngolo(state, problem, manhattanDistance)
+    if prossimoAng != None:
+        return distanza + cornersHeuristic(prossimoAng, problem)
+    return 0
+    
+    
+def prossimoAngolo(state, problem, distanceFunction):
+    posizioneCorrente, angoliVisitati = state
+    angoliNonVisitati = set(problem.corners) - angoliVisitati
+    distProssimoAng = sys.maxint
+    prossimoAng = None
+    for angolo in angoliNonVisitati:
+        #problem.goal = angolo
+        distanza = distanceFunction(posizioneCorrente, angolo)
+        if distanza &lt; distProssimoAng:
+            distProssimoAng = distanza
+            prossimoAng = (angolo, angoliVisitati.union(set((angolo,))))
+    return (prossimoAng, distProssimoAng)
+    </pre>
 						<h3>Test</h3>
 						<p>
 							Al fine di verificare se la nostra rappresentazione degli stati era corretta, abbiamo seguito il test proposto nella consegna. Tale consiste nell’ eseguire i due comandi sottostanti; la rappresentazione del problema doveva far si che l’agente riuscisse a risolvere con successo i due problemi lanciati.
@@ -562,6 +582,7 @@ python pacman.py -l trickySearch -p AStarFoodSearchAgent</pre>
 						<p>
 							otteniamo la soluzione ottima di costo 60 con 1452 nodi espansi ed un tempo di 24.4 secondi.
 						</p>
+						<h3>Dimostrazione</h3>
 						<p>
 							Vediamo ora perchè l'euristica è consistente. Definiamo:
 						</p>
@@ -588,7 +609,7 @@ h(n') = D' + d'</pre>
 						<p>
 							Dopo che Pac-man ha effettuato un movimento possono essere vere due condizioni esclusive: <code>D = D'</code> oppure <code>D &gt; D'</code>.
 						</p>
-						<h3>Caso 1: D = D'</h3>
+						<h4>Caso 1: D = D'</h3>
 						<p>
 							Il fatto che D resti invariato, implica che Pac-man non abbia mangiato nessuno dei cibi "estremi" e che i cibi più vicini a lui non siano "estremi". Pac-man può quindi trovarsi in due stati:
 							<dl>
@@ -615,7 +636,7 @@ D + 1 &le; D + d' + 1, semplificando
 								</dd>
 							</dl>
 						</p>
-						<h3>Caso 2: D &gt; D'</h3>
+						<h4>Caso 2: D &gt; D'</h3>
 						<p>
 							In questo caso Pac-man ha mangiato uno degli "estremi" nello stato n', e questo fa diventare la distanza tra i due nuovi "estremi" minore di quella precedente. Vale <code>d = 1</code> perchè nello stato n, prima che venisse mangiato l'estremo, Pac-man si trovava a distanza 1 da esso. Inoltre consideriamo la figura sottostante che consiste nell'area semplificata di un labirinto senza i muri interni e in cui i punti rossi corrispondono al cibo. E` sempre vero che <code>d' &ge; D - D'</code> perchè nell'area azzurra non potrà essere rimasto del cibo, altrimenti D' non sarebbe la nuova massima distanza tra i due cibi "estremi". Il cibo più vicino a Pac-man nello stato n', dovrà quindi essere contenuto nell'area arancione.
 						</p>
@@ -634,7 +655,47 @@ D + 1 &le; D' + D - D' + h + 1, semplificando
 che è sempre vera. Pertanto la condizione di consistenza è verificata in ogni caso. Poichè l'euristica è consistente, è anche ammissibile e questo garantisce l'ottimalità della soluzione trovata. La codifica scelta dell'euristica è quindi la seguente:
 						</p>
 						<pre>
-******* INSERIRE CODICE FOODHEURISTIC UNA VOLTA SISTEMATO ******
+def foodHeuristic(state, problem):
+  position, foodGrid = state
+    
+  "*** YOUR CODE HERE ***"
+  foodList = foodGrid.asList()
+  
+  maxDistanzaCibi = 0
+  minDistanzaCiboPacman = 0
+  
+  
+  #aggiorno maxDistanzaCibi
+  for cibo1 in foodList:
+     for cibo2 in foodList:
+       #se il valore è già presente nel database aggiorno maxDistanzaCibi
+       if (cibo1, cibo2) in problem.heuristicInfo:
+            if maxDistanzaCibi &lt; problem.heuristicInfo[(cibo1, cibo2)]:
+                maxDistanzaCibi = problem.heuristicInfo[(cibo1, cibo2)]
+       elif (cibo2, cibo1) in problem.heuristicInfo:
+             if maxDistanzaCibi &lt; problem.heuristicInfo[(cibo2, cibo1)]:
+                maxDistanzaCibi = problem.heuristicInfo[(cibo2, cibo1)]
+       else: #se non è nel database, lo calcolo e lo aggiungo al database
+            problem.heuristicInfo[(cibo1, cibo2)] = mazeDistance(cibo1, cibo2, problem.startingGameState)
+            if maxDistanzaCibi &lt; problem.heuristicInfo[(cibo1, cibo2)]:
+                maxDistanzaCibi = problem.heuristicInfo[(cibo1, cibo2)]
+
+  #aggiorno minDistanzaCiboPacman
+  #i controlli minDistanzaCiboPacman == 0 riducono drastiucamente il numero di nodi espansi
+  for cibo in foodList:
+      #se c'è un valore corrispondente nel database
+      if (cibo, position) in problem.heuristicInfo:
+          if minDistanzaCiboPacman == 0 or minDistanzaCiboPacman > problem.heuristicInfo[(cibo, position)]:
+                minDistanzaCiboPacman = problem.heuristicInfo[(cibo, position)]
+      elif (position, cibo) in problem.heuristicInfo:
+          if minDistanzaCiboPacman == 0 or minDistanzaCiboPacman > problem.heuristicInfo[(position, cibo)]:
+                minDistanzaCiboPacman = problem.heuristicInfo[(position, cibo)]
+      else: #se non c'è un valore associato alla cella, lo calcolo e lo inserisco nel database
+          problem.heuristicInfo[(position, cibo)] = mazeDistance(position, cibo, problem.startingGameState)
+          if minDistanzaCiboPacman == 0 or minDistanzaCiboPacman > problem.heuristicInfo[(position, cibo)]:
+                minDistanzaCiboPacman = problem.heuristicInfo[(position, cibo)]
+          
+  return maxDistanzaCibi + minDistanzaCiboPacman
 						</pre>
 					</div>
 					<div id="conclusioni">
