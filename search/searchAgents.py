@@ -257,7 +257,7 @@ def euclideanHeuristic(position, problem, info={}):
 #####################################################
 # This portion is incomplete.  Time to write code!  #
 #####################################################
-def manhattanDistance( xy1, xy2 ):
+def manhattanDistance( xy1, xy2, dummy = (0,0) ):
   "Returns the Manhattan distance between points xy1 and xy2"
   return abs( xy1[0] - xy2[0] ) + abs( xy1[1] - xy2[1] )
   
@@ -593,69 +593,7 @@ class AStarFoodSearchAgent(SearchAgent):
     self.searchFunction = lambda prob: search.aStarSearch(prob, foodHeuristic)
     self.searchType = FoodSearchProblem
 
-def foodHeuristic____(state, problem):
-  """
-  Your heuristic for the FoodSearchProblem goes here.
-  
-  This heuristic must be consistent to ensure correctness.  First, try to come up
-  with an admissible heuristic; almost all admissible heuristics will be consistent
-  as well.
-  
-  If using A* ever finds a solution that is worse uniform cost search finds,
-  your heuristic is *not* consistent, and probably not admissible!  On the other hand,
-  inadmissible or inconsistent heuristics may find optimal solutions, so be careful.
-  
-  The state is a tuple ( pacmanPosition, foodGrid ) where foodGrid is a 
-  Grid (see game.py) of either True or False. You can call foodGrid.asList()
-  to get a list of food coordinates instead.
-  
-  If you want access to info like walls, capsules, etc., you can query the problem.
-  For example, problem.walls gives you a Grid of where the walls are.
-  
-  If you want to *store* information to be reused in other calls to the heuristic,
-  there is a dictionary called problem.heuristicInfo that you can use. For example,
-  if you only want to count the walls once and store that value, try:
-    problem.heuristicInfo['wallCount'] = problem.walls.count()
-  Subsequent calls to this heuristic can access problem.heuristicInfo['wallCount']
-  """
-  position, foodGrid = state
-  "*** YOUR CODE HERE ***"
-  #return foodGrid.count()
-  #return 0
-  
-   
-  foodsList=foodGrid.asList()
-  distBetweenExtremeFoods = 0
-  distPositionToClosestFood = None
-  for food1 in foodsList:
-    for food2 in foodsList:
-      if (food1, food2) in problem.heuristicInfo:
-        if problem.heuristicInfo[(food1, food2)] > distBetweenExtremeFoods:
-          distBetweenExtremeFoods = problem.heuristicInfo[(food1, food2)]
-      elif (food2, food1) in problem.heuristicInfo:
-        if problem.heuristicInfo[(food2, food1)] > distBetweenExtremeFoods:
-          distBetweenExtremeFoods = problem.heuristicInfo[(food2, food1)]
-      else:
-        problem.heuristicInfo[(food1, food2)] = mazeDistance(food1, food2, problem.startingGameState)
-        if problem.heuristicInfo[(food1, food2)] > distBetweenExtremeFoods:
-          distBetweenExtremeFoods = problem.heuristicInfo[(food1, food2)]
-  for food in foodsList:
-    if (position, food) in problem.heuristicInfo:
-      if distPositionToClosestFood == None or distPositionToClosestFood > problem.heuristicInfo[(position, food)]:
-        distPositionToClosestFood = problem.heuristicInfo[(position, food)]
-    elif (food, position) in problem.heuristicInfo:
-      if distPositionToClosestFood == None or distPositionToClosestFood > problem.heuristicInfo[(food, position)]:
-        distPositionToClosestFood = problem.heuristicInfo[(food, position)]
-    else:
-      problem.heuristicInfo[(position, food)] = mazeDistance(position, food, problem.startingGameState)
-      if distPositionToClosestFood == None or distPositionToClosestFood > problem.heuristicInfo[(position, food)]:
-        distPositionToClosestFood = problem.heuristicInfo[(position, food)]
-  if distPositionToClosestFood == None:
-    distPositionToClosestFood = 0      
-  heuristicValue = distBetweenExtremeFoods + distPositionToClosestFood
-  
 
-  return heuristicValue
   
 """
 DATABASE DI PATTERN DISGIUNTI
@@ -727,7 +665,7 @@ h(N) <= h(P) +1
 """ 
 
 #sembra fare una funzione che faccia i controlli dentro gli il rallenti il tutto 
-def foodHeuristic(state, problem):
+def calculateHeuristic(state, problem, distance):
   position, foodGrid = state
     
   "*** YOUR CODE HERE ***"
@@ -748,7 +686,7 @@ def foodHeuristic(state, problem):
              if maxDistanzaCibi < problem.heuristicInfo[(cibo2, cibo1)]:
                 maxDistanzaCibi = problem.heuristicInfo[(cibo2, cibo1)]
        else: #se non è nel database, lo calcolo e lo aggiungo al database
-            problem.heuristicInfo[(cibo1, cibo2)] = mazeDistance(cibo1, cibo2, problem.startingGameState)
+            problem.heuristicInfo[(cibo1, cibo2)] = distance(cibo1, cibo2, problem.startingGameState)
             if maxDistanzaCibi < problem.heuristicInfo[(cibo1, cibo2)]:
                 maxDistanzaCibi = problem.heuristicInfo[(cibo1, cibo2)]
 
@@ -763,33 +701,37 @@ def foodHeuristic(state, problem):
           if minDistanzaCiboPacman == 0 or minDistanzaCiboPacman > problem.heuristicInfo[(position, cibo)]:
                 minDistanzaCiboPacman = problem.heuristicInfo[(position, cibo)]
       else: #se non c'è un valore associato alla cella, lo calcolo e lo inserisco nel database
-          problem.heuristicInfo[(position, cibo)] = mazeDistance(position, cibo, problem.startingGameState)
+          problem.heuristicInfo[(position, cibo)] = distance(position, cibo, problem.startingGameState)
           if minDistanzaCiboPacman == 0 or minDistanzaCiboPacman > problem.heuristicInfo[(position, cibo)]:
                 minDistanzaCiboPacman = problem.heuristicInfo[(position, cibo)]
           
   return maxDistanzaCibi + minDistanzaCiboPacman
           
-          
-  
-def foodHeuristic_2(state, problem):
-   #nodi espansi: 10576
-    position, foodGrid = state
-    
-    "*** YOUR CODE HERE ***"
-    foodList = foodGrid.asList()
-    closestDistance = 0
-    for foodCord in foodGrid.asList():
-       xy1 = foodCord
-       xy2 = position
-       distance = abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
-       #print 'la distanza tra %s' % (xy1,) + ' e %s' % (xy2,) + ' e ' + str(distance) 
-       
-       if distance > closestDistance:
-           closestDistance = distance
+def foodHeuristic_0(state, problem):
+    return calculateHeuristic(state, problem, manhattanDistance)
+              
+def foodHeuristic(state, problem):
+    return calculateHeuristic(state, problem, mazeDistance)
 
-    #print 'closest distance è: ' + str(closestDistance)
-    return closestDistance 
- 
+# def foodHeuristic_2(state, problem):
+#    #nodi espansi: 10576
+#     position, foodGrid = state
+#     
+#     "*** YOUR CODE HERE ***"
+#     foodList = foodGrid.asList()
+#     closestDistance = 0
+#     for foodCord in foodGrid.asList():
+#        xy1 = foodCord
+#        xy2 = position
+#        distance = abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
+#        #print 'la distanza tra %s' % (xy1,) + ' e %s' % (xy2,) + ' e ' + str(distance) 
+#        
+#        if distance > closestDistance:
+#            closestDistance = distance
+# 
+#     #print 'closest distance è: ' + str(closestDistance)
+#     return closestDistance 
+#  
   
 class ClosestDotSearchAgent(SearchAgent):
   "Search for all food using a sequence of searches"
