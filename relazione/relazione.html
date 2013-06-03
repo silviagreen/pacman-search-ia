@@ -21,7 +21,7 @@
 				<p class="lead">
 					Corso di Intelligenza Artificiale 2012 / 2013
 				</p>
-				<img src="img/pacman_game.gif"/>
+				<img class="img-polaroid" src="img/intro.jpg"/>
 			</div>
 			<div class="row-fluid">
 				<div class="span3 bs-docs-sidebar indice">
@@ -166,8 +166,11 @@
 					</div>
 					<div id="ptfissato">
 						<h2>Trovare un Punto Fissato</h2>
+						<div class="img text-center">
+							<img class="img-polaroid" src="img/p1.jpg"/>
+						</div>
 						<p>
-							Il primo problema preso in considerazione consiste nel far raggiungere a Pac-Man un punto fissato all’interno del labirinto tramite diversi algoritmi di ricerca visti a lezione, nello specifico: depth-first, breadth-first, costo uniforme e A*.La rappresentazione dei nodi nel grafo di ricerca è data dalla funzione <code>getSuccessors</code> della classe	<code>PositionSearchProblem</code>. Un nodo è rappresentato dalle coordinate x e y nel labirinto, dall'insieme di azioni e dal costo complessivo per arrivare a quello stato. Si è deciso di implementare innanzitutto una funzione di ricerca generica che utilizzasse come frontiera una lista astratta, istanziata a seconda del caso specifico come una pila, una coda, o una coda con priorità. La <code>genericSearch</code> è quindi definita come segue:
+							Il primo problema preso in considerazione consiste nel far raggiungere a Pac-Man un punto fissato all’interno del labirinto tramite diversi algoritmi di ricerca visti a lezione, nello specifico: depth-first, breadth-first, costo uniforme e A*.La rappresentazione dei nodi nel grafo di ricerca è data dalla funzione <code>getSuccessors</code> della classe	<code>PositionSearchProblem</code>. Un nodo è rappresentato dalle coordinate x e y nel labirinto, dall'insieme di azioni e dal costo complessivo per arrivare a quello stato. Si è deciso di implementare innanzitutto una funzione di ricerca generica che utilizzasse come frontiera una lista astratta, istanziata a seconda del caso specifico come una pila, una coda, o una coda con priorità.<!--change--> Questa funzione deve ritornare una lista di azioni che conducono l'agente dallo stato iniziale al goal.<!--end change--> La <code>genericSearch</code> è quindi definita come segue:
 						</p>
 						<pre>
 ﻿def genericSearch(problem, frontiera, euristica=nullHeuristic):
@@ -376,6 +379,9 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 					</div>
 					<div id="angoli">
 						<h2>Trovare Tutti gli Angoli</h2>
+						<div class="img text-center">
+							<img class="img-polaroid" src="img/p2.jpg"/>
+						</div>
 						<h3>Struttura del problema</h3>
 						<p>
 							In questo secondo problema vengono utilizzati i layout cornerMazes; questi contengono 4 cibi, uno in ogni angolo del labirinto e Pac-Man, attraverso gli algoritmi di ricerca, deve essere in grado di trovare il percorso più breve attraverso il labirinto che tocchi tutti e quattro gli angoli. La rappresentazione degli stati scelta per questo problema è la seguente:
@@ -560,6 +566,9 @@ python pacman.py -l mediumCorners -p SearchAgent -a fn=bfs,prob=CornersProblem <
 					</div>
 					<div id="cibo">
 						<h2>Mangiare Tutto il Cibo</h2>
+						<div class="img text-center">
+							<img class="img-polaroid" src="img/p3.jpg"/>
+						</div>
 						<p>
 							Quest'ultimo problema richiede di far mangiare a Pac-Man tutto il cibo presente nel labirinto nel minor numero di passi possibile. La quantità e la disposizione del cibo sono casuali. Il problema è codificato nella classe <code>FoodSearchProblem</code> del file <code>searchAgents.py</code>. Uno stato del grafo di ricerca è rappresentato dalla coppia:
 						</p>
@@ -571,8 +580,8 @@ python pacman.py -l mediumCorners -p SearchAgent -a fn=bfs,prob=CornersProblem <
 						<p>
 							La nostra idea inizialmente è stata quella di usare un'euristica simile a quella del problema precedente, che memorizzasse cioè di volta in volta la distanza minore tra Pac-Man ed ogni cibo rimanente e sommasse queste distanze. Purtroppo un'euristica di questo tipo non è ammissibile per questo problema perchè ad esempio nel seguente layout cercherebbe prima di mangiare il cibo più vicino subito sulla destra, poi tornerebbe a sinistra e infine mangerebbe l'ultimo cibo in fondo a destra, sovrastimando così il costo della soluzione ottima (che consiste invece nel raggiungere prima l'angolo di sinistra e poi quello di destra).
 						</p>
-						<div class="text-center">
-							<img src="img/fail.jpg" />
+						<div class="img text-center">
+							<img class="img-polaroid" src="img/fail.jpg" />
 						</div>
 						<p>
 							Un'euristica più semplice ma che espande molti più nodi potrebbe essere quella del "nearest neghbour", che considera in ogni stato la distanza al cibo più vicino. La lentezza dell'euristica tuttavia può essere risolta sommando a questo fattore la distanza tra i due cibi più distanti rimasti nel labirinto. Quest'euristica è ammissibile e consistente e riesce a trovare la soluzione ottima nel layout <code>trickySearch</code> espandendo relativamente pochi nodi. Eseguendo infatti il comando
@@ -580,8 +589,8 @@ python pacman.py -l mediumCorners -p SearchAgent -a fn=bfs,prob=CornersProblem <
 						<pre>
 python pacman.py -l trickySearch -p AStarFoodSearchAgent</pre>
 						<p>
-							otteniamo la soluzione ottima di costo 60 con 726 nodi espansi ed un tempo di 10.9 secondi.
-						</p> <!-- 1452 nodi espansi in  24.4 sec-->
+							otteniamo la soluzione ottima di costo 60 con 8111 nodi espansi ed un tempo di 12.3 secondi.
+						</p>
 						<h3>Dimostrazione</h3>
 						<p>
 							Vediamo ora perchè l'euristica è consistente. Definiamo:
@@ -609,7 +618,7 @@ h(n') = D' + d'</pre>
 						<p>
 							Dopo che Pac-Man ha effettuato un movimento possono essere vere due condizioni esclusive: <code>D = D'</code> oppure <code>D &gt; D'</code>.
 						</p>
-						<h4>Caso 1: D = D'</h3>
+						<h4>Caso 1: D = D'</h4>
 						<p>
 							Il fatto che D resti invariato, implica che Pac-Man non abbia mangiato nessuno dei cibi "estremi" e che i cibi più vicini a lui non siano "estremi". Pac-Man può quindi trovarsi in due stati:
 							<dl>
@@ -636,12 +645,12 @@ D + 1 &le; D + d' + 1, semplificando
 								</dd>
 							</dl>
 						</p>
-						<h4>Caso 2: D &gt; D'</h3>
+						<h4>Caso 2: D &gt; D'</h4>
 						<p>
 							In questo caso Pac-Man ha mangiato uno degli "estremi" nello stato n', e questo fa diventare la distanza tra i due nuovi "estremi" minore di quella precedente. Vale <code>d = 1</code> perchè nello stato n, prima che venisse mangiato l'estremo, Pac-Man si trovava a distanza 1 da esso. Inoltre consideriamo la figura sottostante che consiste nell'area semplificata di un labirinto senza i muri interni e in cui i punti rossi corrispondono al cibo. E` sempre vero che <code>d' &ge; D - D'</code> perchè nell'area azzurra non potrà essere rimasto del cibo, altrimenti D' non sarebbe la nuova massima distanza tra i due cibi "estremi". Il cibo più vicino a Pac-Man nello stato n', dovrà quindi essere contenuto nell'area arancione.
 						</p>
-						<div class="text-center">
-							<img src="img/dimostrazione.jpg" />
+						<div class="img text-center">
+							<img class="img-polaroid" src="img/dimostrazione.jpg" />
 						</div>
 						<p>
 							Quest'ultima disequazione può essere riscritta come:
@@ -656,47 +665,52 @@ che è sempre vera. Pertanto la condizione di consistenza è verificata in ogni 
 						</p>
 						<pre>
 def foodHeuristic(state, problem):
-  position, foodGrid = state
-    
-  "*** YOUR CODE HERE ***"
-  foodList = foodGrid.asList()
+    return calculateHeuristic(state, problem, manhattanDistance)</pre>
+						<pre>
+def calculateHeuristic(state, problem, distance):
+    position, foodGrid = state
   
-  maxDistanzaCibi = 0
-  minDistanzaCiboPacman = 0
+    foodList = foodGrid.asList()
   
+    maxDistanzaCibi = 0
+    minDistanzaCiboPacman = 0
   
-  #aggiorno maxDistanzaCibi
-  for cibo1 in foodList:
-     for cibo2 in foodList:
-       #se il valore è già presente nel database aggiorno maxDistanzaCibi
-       if (cibo1, cibo2) in problem.heuristicInfo:
-            if maxDistanzaCibi &lt; problem.heuristicInfo[(cibo1, cibo2)]:
-                maxDistanzaCibi = problem.heuristicInfo[(cibo1, cibo2)]
-       elif (cibo2, cibo1) in problem.heuristicInfo:
-             if maxDistanzaCibi &lt; problem.heuristicInfo[(cibo2, cibo1)]:
-                maxDistanzaCibi = problem.heuristicInfo[(cibo2, cibo1)]
-       else: #se non è nel database, lo calcolo e lo aggiungo al database
-            problem.heuristicInfo[(cibo1, cibo2)] = mazeDistance(cibo1, cibo2, problem.startingGameState)
-            if maxDistanzaCibi &lt; problem.heuristicInfo[(cibo1, cibo2)]:
-                maxDistanzaCibi = problem.heuristicInfo[(cibo1, cibo2)]
+    #aggiorno maxDistanzaCibi
+    for cibo1 in foodList:
+        for cibo2 in foodList:
+            #se il valore è già presente nel database aggiorno maxDistanzaCibi
+            if (cibo1, cibo2) in problem.heuristicInfo:
+                if maxDistanzaCibi &lt; problem.heuristicInfo[(cibo1, cibo2)]:
+                    maxDistanzaCibi = problem.heuristicInfo[(cibo1, cibo2)]
+            elif (cibo2, cibo1) in problem.heuristicInfo:
+                if maxDistanzaCibi &lt; problem.heuristicInfo[(cibo2, cibo1)]:
+                    maxDistanzaCibi = problem.heuristicInfo[(cibo2, cibo1)]
+            else: #se non è nel database, lo calcolo e lo aggiungo al database
+                problem.heuristicInfo[(cibo1, cibo2)] = distance(cibo1, cibo2, problem.startingGameState)
+                if maxDistanzaCibi &lt; problem.heuristicInfo[(cibo1, cibo2)]:
+                    maxDistanzaCibi = problem.heuristicInfo[(cibo1, cibo2)]
 
-  #aggiorno minDistanzaCiboPacman
-  #i controlli minDistanzaCiboPacman == 0 riducono drastiucamente il numero di nodi espansi
-  for cibo in foodList:
-      #se c'è un valore corrispondente nel database
-      if (cibo, position) in problem.heuristicInfo:
-          if minDistanzaCiboPacman == 0 or minDistanzaCiboPacman > problem.heuristicInfo[(cibo, position)]:
+    #aggiorno minDistanzaCiboPacman
+    #i controlli minDistanzaCiboPacman == 0 riducono drastiucamente il numero di nodi espansi
+    for cibo in foodList:
+        #se c'è un valore corrispondente nel database
+        if (cibo, position) in problem.heuristicInfo:
+            if minDistanzaCiboPacman == 0 or minDistanzaCiboPacman > problem.heuristicInfo[(cibo, position)]:
                 minDistanzaCiboPacman = problem.heuristicInfo[(cibo, position)]
-      elif (position, cibo) in problem.heuristicInfo:
-          if minDistanzaCiboPacman == 0 or minDistanzaCiboPacman > problem.heuristicInfo[(position, cibo)]:
+        elif (position, cibo) in problem.heuristicInfo:
+            if minDistanzaCiboPacman == 0 or minDistanzaCiboPacman > problem.heuristicInfo[(position, cibo)]:
                 minDistanzaCiboPacman = problem.heuristicInfo[(position, cibo)]
-      else: #se non c'è un valore associato alla cella, lo calcolo e lo inserisco nel database
-          problem.heuristicInfo[(position, cibo)] = mazeDistance(position, cibo, problem.startingGameState)
-          if minDistanzaCiboPacman == 0 or minDistanzaCiboPacman > problem.heuristicInfo[(position, cibo)]:
+        else: #se non c'è un valore associato alla cella, lo calcolo e lo inserisco nel database
+            problem.heuristicInfo[(position, cibo)] = distance(position, cibo, problem.startingGameState)
+            if minDistanzaCiboPacman == 0 or minDistanzaCiboPacman > problem.heuristicInfo[(position, cibo)]:
                 minDistanzaCiboPacman = problem.heuristicInfo[(position, cibo)]
           
-  return maxDistanzaCibi + minDistanzaCiboPacman
-						</pre>
+    return maxDistanzaCibi + minDistanzaCiboPacman</pre>
+						<!--change-->
+						<p>
+							L'implementazione del problema fornita comprende anche un metodo <code>mazeDistance</code> che dati due punti ritorna la distanza tra di loro calcolata effettuando una ricerca BFS. Utilizzando questa euristica invece della distanza di Manhattan si ottengono risultati notevolmente migliori, infatti otteniamo la soluzione ottima di costo 60 con 726 nodi espansi ed un tempo di 10.9 secondi. Tuttavia non abbiamo approfondito questo tema in quanto vengono utilizzati i database di pattern, argomento non trattato a lezione.  
+						</p>
+						<!--end change-->
 					</div>
 					<div id="conclusioni">
 						<h2>Conclusioni</h2>
@@ -707,10 +721,6 @@ def foodHeuristic(state, problem):
 		</div>
 	</body>
 	<script src="js/jquery.js"></script>
-   
-  
-   
     <script src="js/bootstrap-scrollspy.js"></script>
-   
     <script src="js/bootstrap-affix.js"></script>
 </html>
