@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Relazione - Progetto I.A. 2013</title>
+		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+		<link href="css/docs.css" rel="stylesheet">
+		<link href="css/stile.css" rel="stylesheet" media="screen">
+		<style type="text/css">
+		</style>
+	</head>
+	<body data-spy="scroll" data-target=".bs-docs-sidebar">
+		<header class="titolo">
+			<h1>Ricerca in Pac-Man</h1>
+			<p class="lead nomi">
+				Rango Massimiliano, Segato Silvia
+			</p>
+			<p class="lead">
+				Corso di Intelligenza Artificiale 2012 / 2013
+			</p>
+			<img class="img-polaroid" src="img/intro.jpg" width="60%"/>
+		</header>
+		<div class="container">
+			<div class="row">
+				<div class="span3 bs-docs-sidebar">
+					<ul class="nav nav-list bs-docs-sidenav affix-top">﻿
+						<li>
+							<a href="#introduzione"> <i class="icon-chevron-right"></i> Introduzione </a>
+						</li>
+						<li>
+							<a href="#consuntivo"> <i class="icon-chevron-right"></i>Consuntivo Ore</a>
+						</li>
+						<li>
+							<a href="#struttura"><i class="icon-chevron-right"></i>Struttura del Progetto</a>
+						</li>
+						<li>
+							<a href="#ptfissato"><i class="icon-chevron-right"></i>Trovare un Punto Fissato</a>
+						</li>
+						<li>
+							<a href="#angoli"><i class="icon-chevron-right"></i>Trovare Tutti gli Angoli</a>
+						</li>
+						<li>
+							<a href="#cibo"><i class="icon-chevron-right"></i>Mangiare Tutto il Cibo</a>
+						</li>
+						<li>
+							<a href="#conclusioni"><i class="icon-chevron-right"></i>Conclusioni</a>
+						</li>
+					</ul>
+				</div>
+				<div class="span9">
+					<div id="introduzione">
+						<h2>Introduzione</h2>
+						<p>
+							Il progetto è stato realizzato nell'anno accademico 2012/2013 per il corso di Intelligenza Artificiale dell'Università degli Studi di Padova e si basa sul primo di una serie di progetti parzialmente implementati messi a disposizione dalla University of Califonia, Berkeley e disponibili alla pagina <a href="http://www-inst.eecs.berkeley.edu/~cs188/pacman/pacman.html">http://www-inst.eecs.berkeley.edu/~cs188/pacman/pacman.html</a>.
+							<br/>
+							Lo scopo di questo progetto è quello di implementare alcuni algoritmi di ricerca su grafi applicandoli a tre diversi problemi inerenti il mondo di Pac-Man. In questo contesto Pac-Man si trova da solo in un labirinto di dimensioni e disposizione dei muri casuali e deve riuscire a mangiare tutto il cibo presente, collocato in modo diverso a seconda del particolare problema preso in esame.
+						</p>
+					</div>
+					<div id="consuntivo">
+						<h2>Consuntivo Ore</h2>
+						<p>
+							Il progetto ha richiesto un totale di 50 ore complessive (25 ore a persona), suddivise nel seguente modo:
+						</p>
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Fase</th><th>Ore</th><th>Descrizione</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th>Analisi dei requisiti</th><td>11</td><td>Studio di Python, studio della struttura del progetto e dei file da modificare.</td>
+								</tr>
+								<tr>
+									<th>Progettazione</th><td>20</td><td>Progettazione dell'implementazione degli algoritmi di ricerca su grafo, euristiche e strutture dati da utilizzare.</td>
+								</tr>
+								<tr>
+									<th>Programmazione</th><td>10</td><td>Implementazione algoritmi, euristiche e strutture dati.</td>
+								</tr>
+								<tr>
+									<th>Test e Raccolta Dati</th><td>4</td><td>Confronto tra i diversi algoritmi, tra le diverse euristiche considerando il tempo d'esecuzione, il costo del percorso trovato e il numero di nodi espansi.</td>
+								</tr>
+								<tr>
+									<th>Documentazione</th><td>5</td><td>Stesura relazione finale e presentazione.</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div id="struttura">
+						<h2>Struttura del Progetto</h2>
+						<p>
+							Il codice del progetto si trova all’interno della cartella <code>/search</code>. Al suo interno si trovano la cartella <code>/layout</code> che contiene le strutture dei labirinti con la posizione del cibo e la posizione iniziali di Pac-Man, e una serie di file Python che costituiscono il cuore del gioco.
+							<br />
+							I file riguardanti la grafica non sono stati usati per lo svolgimento del progetto e sono:
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Nome File</th><th>Descrizione</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>graphicDisplay.py</td><td>grafica per Pac-Man</td>
+									</tr>
+									<tr>
+										<td>graphicUtil.py</td><td>supporto per la grafica</td>
+									</tr>
+									<tr>
+										<td>textDisplay.py</td><td>grafica ASCII per Pac-Man</td>
+									</tr>
+									<tr>
+										<td>ghostAgents.py</td><td>agenti per controllare i fantasmi</td>
+									</tr>
+									<tr>
+										<td>keyboardAgents.py</td><td>interfaccia per controllare Pac-Man con la tastiera</td>
+									</tr>
+									<tr>
+										<td>layout.py</td><td>codice per leggere i file contenuti in <code>/layout</code></td>
+									</tr>
+								</tbody>
+							</table>
+							I file che è stato necessario comprendere ai fini dello svolgimento del problema sono i seguenti:
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Nome File</th><th>Descrizione</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>pacman.py</td><td>file principale che esegue il gioco; in particolare è stato necessario prestare attentione al tipo GameState</td>
+									</tr>
+									<tr>
+										<td>game.py</td><td>contiene la logica del mondo di Pac-Man</td>
+									</tr>
+									<tr>
+										<td>util.py</td><td>contiene le strutture dati utili per l’implementazione degli algoritmi di ricerca</td>
+									</tr>
+								</tbody>
+							</table>
+							I file che contengono il nostro lavoro sul progetto sono:
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Nome File</th><th>Descrizione</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>search.py</td><td>contiene l’implememtazione di tutti gli algoritmi di ricerca</td>
+									</tr>
+									<tr>
+										<td>searchAgents.py</td><td>contiene l’implementazione di tutti gli agenti</td>
+									</tr>
+								</tbody>
+							</table>
+						</p><h3>Come avviare il gioco</h3>
+						<p>
+							Il gioco si avvia sempre tramite riga di comando. È possibile controllare Pac-Man con la tastiera (e quindi permettere ad un utente di poter effetivamente giocare) con il seguente comando: 							<pre>python pacman.py</pre>
+							Nel corso del progetto è stato necessario utilizzare diversi tipi di layout, algoritmo (con euristica per quelli che ne utilizzano una), agenti in base al problema considerato. Tali cambiamenti vengono attuati via riga di comando specificando le opzioni  dopo  il comando sopra; la lista delle opzioni è elencata eseguendo 							<pre>python pacman.py –h</pre>
+							Tutti i comandi che sono stati utilizzati nel progetto sono contenuti in <code>/search/command.txt</code>.
+						</p>
+					</div>
+					<div id="ptfissato">
+						<h2>Trovare un Punto Fissato</h2>
+						<div class="img text-center">
+							<img class="img-polaroid" src="img/p1.jpg"/>
+						</div>
+						<p>
+							Il primo problema preso in considerazione consiste nel far raggiungere a Pac-Man un punto fissato all’interno del labirinto tramite diversi algoritmi di ricerca visti a lezione, nello specifico: depth-first, breadth-first, costo uniforme e A*. La rappresentazione dei nodi nel grafo di ricerca è data dalla funzione <code>getSuccessors</code> della classe	<code>PositionSearchProblem</code>. Un nodo è rappresentato dalle coordinate x e y nel labirinto, dall'insieme di azioni e dal costo complessivo per arrivare a quello stato. Si è deciso di implementare innanzitutto una funzione di ricerca generica che utilizzasse come frontiera una lista astratta, istanziata a seconda del caso specifico come una pila, una coda, o una coda con priorità. Questa funzione deve ritornare una lista di azioni che conducono l'agente dallo stato iniziale al goal. La <code>genericSearch</code> è quindi definita come segue:
+						</p>
+						<pre>
+﻿def genericSearch(problem, frontiera, euristica=nullHeuristic):
+﻿    esplorati = []
+﻿    frontiera.push((problem.getStartState(), [] , 0), 0)
+﻿  ﻿    
+﻿    while(not(frontiera.isEmpty())):
+﻿  ﻿      stato, azioni, costo = frontiera.pop()
+﻿  ﻿      
+﻿  ﻿      if problem.isGoalState(stato):
+﻿  ﻿          return azioni #soluzione corrispondente
+﻿  ﻿      
+﻿  ﻿      esplorati.append(stato)
+﻿  ﻿      successori = problem.getSuccessors(stato)
+﻿  ﻿      
+﻿  ﻿      for statoSuccessore, azioneSuccessore, costoSuccessore in successori:
+﻿  ﻿          nuovaAzione = azioni + [azioneSuccessore]
+﻿  ﻿          nuovoCosto = costo + costoSuccessore #g(n)
+﻿  ﻿          nodoSuccessore = (statoSuccessore, nuovaAzione, nuovoCosto)
+﻿  ﻿          if statoSuccessore not in esplorati and not frontiera.contains(statoSuccessore, nuovoCosto):
+﻿  ﻿              frontiera.push(nodoSuccessore, nuovoCosto + euristica(statoSuccessore, problem))
+﻿  ﻿    
+﻿  ﻿  return None</pre>
+						<p>
+							Finché la frontiera non è vuota o non si raggiunge lo stato goal, viene estratto l’elemento successivo (in modo dipendente dal supporto di memorizzazione specifico), viene ricavata la lista dei successori del nodo corrente e quelli non ancora esplorati vengono aggiunti alla frontiera. Le implementazioni degli algoritmi specifici risultano a questo punto triviali, in quanto è sufficiente istanziare il supporto di memorizzazione corretto.
+						</p>
+						<h3>Depth-first Search:</h3>
+						<pre>
+def depthFirstSearch(problem):
+    "Search the deepest nodes in the search tree first"
+﻿  ﻿  frontiera = util.Stack()
+﻿  ﻿  return genericSearch(problem, frontiera)</pre>
+						<p>
+							La frontiera è implementata come una pila LIFO, in questo modo viene estratto sempre il nodo inserito per ultimo, il che realizza la visita del grafo in profondità. L'algoritmo è stato eseguito sui labirinti	<code>tinyMaze</code>, <code>mediumMaze</code> e <code>bigMaze</code>. E` possibile lanciare la ricerca DFS sui diversi layout nel seguente modo:
+						</p>
+						<pre>python pacman.py -l layout -p SearchAgent -a fn=dfs</pre>
+						<p>
+							dove
+							<code>
+								layout
+							</code>
+							è il layout preso in considerazione. I risultati ottenuti sono i seguenti:
+						</p>
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Layout</th><th>Tempo impiegato (s)</th><th>Nodi espansi</th><th>Costo percorso</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>tinyMaze</td><td>0.0</td><td>15</td><td>10</td>
+								</tr>
+								<tr>
+									<td>mediumMaze</td><td>0.0</td><td>146</td><td>130</td>
+								</tr>
+								<tr>
+									<td>bigMaze</td><td>0.1</td><td>390</td><td>210</td>
+								</tr>
+							</tbody>
+						</table>
+						<h3>Breadth-first Search:</h3>
+						<pre>
+def breadthFirstSearch(problem):
+﻿    "Search the shallowest nodes in the search tree first."
+﻿    frontiera = util.Queue()
+﻿    return genericSearch(problem, frontiera)</pre>
+						<p>
+							La frontiera è implementata come una coda FIFO, in questo modo viene estratto sempre il nodo inserito per primo, il che realizza la visita del grafo in ampiezza. L'algoritmo è stato eseguito sui labirinti <code>tinyMaze</code>, <code>mediumMaze</code> e <code>bigMaze</code>. E` possibile lanciare la ricerca BFS sui diversi layout nel seguente modo:
+						</p>
+						<pre>python pacman.py -l layout -p SearchAgent -a fn=bfs</pre>
+						<p>
+							dove <code>layout</code> è il layout preso in considerazione. I risultati ottenuti sono i seguenti:
+						</p>
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Layout</th>
+									﻿  ﻿ <th>Tempo impiegato (s)</th>
+									﻿  ﻿ <th>Nodi espansi</th>
+									﻿  ﻿ <th>Costo percorso</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>tinyMaze</td><td>0.0</td><td>15</td><td>8</td>
+								</tr>
+								<tr>
+									<td>mediumMaze</td><td>0.0</td><td>269</td><td>68</td>
+								</tr>
+								<tr>
+									<td>bigMaze</td><td>0.1</td><td>620</td><td>210</td>
+								</tr>
+							</tbody>
+						</table>
+						<h3>Uniform Cost Search:</h3>						
+						<pre>
+def uniformCostSearch(problem):
+﻿    "Search the node of least total cost first."
+﻿    frontiera = util.PriorityQueue()
+﻿    return genericSearch(problem, frontiera)</pre>
+						<p>
+							La frontiera è implementata come una coda con priorità, in questo modo viene estratto per primo sempre il nodo con priorità più alta. L'algoritmo è stato eseguito sui labirinti <code>mediumMaze</code> e <code>bigMaze</code> come tutti gli altri algoritmi. Inoltre è stato testato sul labirinto <code>mediumDottedMaze</code> con agente <code>StayEastSearchAgent</code>, che penalizza i passi verso la parte sinistra del labirinto, e sul labirinto <code>mediumScaryMaze</code> con agente <code>StayWestSearchAgent</code> che penalizza i passi verso la parte destra del labirinto. E` possibile lanciare la ricerca DFS sui diversi layout nel seguente modo:
+						</p>
+						<pre>python pacman.py -l layout -p SearchAgent -a fn=ucs</pre>
+						<p>
+							dove <code>layout</code> è il layout preso in considerazione. Per gli agenti <code>StayEastSearchAgent</code> e <code>StayWestSearchAgent</code> i problemi sono diversi e devono essere eseguiti con la seguente sintassi:
+						</p>
+						<pre>
+python pacman.py -l mediumDottedMaze -p StayEastSearchAgent
+python pacman.py -l mediumScaryMaze -p StayWestSearchAgent</pre>
+						<p>																												
+						I risultati ottenuti sono i seguenti:
+						</p>
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Layout</th><th>Tempo impiegato (s)</th><th>Nodi espansi</th><th>Costo percorso</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>mediumMaze</td>
+									﻿  ﻿ <td>0.0</td>
+									﻿  ﻿ <td>268</td>
+									﻿  ﻿ <td>68</td>
+								</tr>
+								<tr>
+									<td>bigMaze</td>
+									﻿  ﻿ <td>0.1</td>
+									﻿  ﻿ <td>619</td>
+									﻿  ﻿ <td>210</td>
+								</tr>
+								<tr>
+									﻿  ﻿ <td>mediumDottedMaze</td>
+									﻿  ﻿ <td>0.0</td>
+									﻿  ﻿ <td>190</td>
+									﻿  ﻿ <td>1</td>
+								</tr>
+								<tr>
+									﻿  ﻿ <td>mediumScaryMaze</td>
+									﻿  ﻿ <td>0.0</td>
+									﻿  ﻿ <td>108</td>
+									﻿  ﻿ <td>68719479864</td>
+								</tr>
+							</tbody>
+						</table>
+						<p>
+							Il costo dei percorsi trovati dall'agente <code>StayEastSearchAgent</code> e <code>StayWestSearchAgent</code> è molto basso nel primo caso e molto alto nel secondo, a causa delle loro funzioni di costo. Il primo infatti eleva 0.5 al valore della coordinata x (maggiore è il valore di x, minore è il costo), rendendo la somma dei costi sempre minore di 1. Il secondo invece eleva 2 al valore della coordinata x, in questo modo maggiore è il valore di x, maggiore è il costo.
+						</p>
+						<h3>A* Search:</h3>
+						<pre>
+def aStarSearch(problem, heuristic=nullHeuristic):
+﻿    "Search the node that has the lowest combined cost and heuristic first."
+﻿  ﻿  frontiera = util.PriorityQueue()
+﻿  ﻿  return genericSearch(problem, frontiera, heuristic)</pre>
+						<p>
+							La frontiera è implementata come una coda con priorità, in cui la priorità è data dall'euristica passata all'algoritmo. L'algoritmo è stato eseguito sui labirinti <code>mediumMaze</code> e <code>bigMaze</code> come tutti gli altri algoritmi. Inoltre è stato testato sul labirinto <code>bigMaze</code> con euristica nulla e con la distanza di Manhattan. Quest'ultima restituisce la somma dei valori assoluti delle differenze tra le coordinate dello stato corrente e del goal. E` possibile lanciare la ricerca A* sui diversi layout nel seguente modo:
+						</p>
+						<pre>python pacman.py -l layout -p SearchAgent -a fn=astar</pre>
+						<p>
+							Aggiungendo la distanza di Manhattan come euristica invece:
+						</p>
+						<pre>python pacman.py -l layout -p SearchAgent -a fn=astar,heuristic=manhattanHeuristic</pre>
+						<p>dove	<code>layout</code> è il layout preso in considerazione. I risultati ottenuti sono i seguenti:
+						</p>
+						<table class="table">
+							<thead>
+								<tr>
+									﻿  ﻿ <th>Layout</th>
+									﻿  ﻿ <th>Euristica</th>
+									﻿  ﻿ <th>Tempo impiegato (s)</th>
+									﻿  ﻿ <th>Nodi espansi</th>
+									﻿  ﻿ <th>Costo percorso</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>mediumMaze</td>
+									﻿  ﻿ <td>Manhattan Distance</td>
+									﻿  ﻿ <td>0.0</td>
+									﻿  ﻿ <td>221</td>
+									﻿  ﻿ <td>68</td>
+								</tr>
+								<tr>
+									﻿  ﻿ <td>bigMaze</td>
+									﻿  ﻿ <td>Null</td>
+									﻿  ﻿ <td>0.1</td>
+									﻿  ﻿ <td>619</td>
+									﻿  ﻿ <td>210</td>
+								</tr>
+								<tr>
+									<td>bigMaze</td><td>Manhattan Distance</td>
+									﻿  ﻿ <td>0.1</td>
+									﻿  ﻿ <td>538</td>
+									﻿  ﻿ <td>210</td>
+								</tr>
+							</tbody>
+						</table>
+						<p>
+							Si può notare come in mancanza di un'euristica, l'algoritmo corrisponda esattamente la ricerca con costo uniforme. Utilizzando la distanza di Manhattan invece l'algoritmo riesce a trovare una soluzione più velocemente. La soluzione trovata inoltre è ottima, poichè l'euristica è ammissibile e consistente. L'ammissibilità deriva dal fatto che l'eurisitca non sovrastima mai il costo della soluzione ottima, essendo la distanza di Manhattan il minor numero di passi per raggiungere un punto in assenza di muri. La consistenza invece è verificata poichè ogni passo ha costo 1 ed ogni passo avvicina al più di 1 Pac-Man al cibo: la disequazione <code>h(n) &le; h(n') + 1</code> è pertanto vera.
+						</p>
+						<p>
+							Prendendo come metodo di confronto i dati ottenuti sul <code>mediumMaze</code> è evidente che tra questi algoritmi, a "vincere" è A* con euristica distanza di Manhattan, espandendo 221 nodi. L'algoritmo Depth-first infatti trova la soluzione espandendo solo 146 nodi, ma non riesce a trovare quella ottima, essendo il costo del percorso trovato 130.
+						</p>
+					</div>
+					<div id="angoli">
+						<h2>Trovare Tutti gli Angoli</h2>
+						<div class="img text-center">
+							<img class="img-polaroid" src="img/p2.jpg"/>
+						</div>
+						<h3>Struttura del problema</h3>
+						<p>
+							In questo secondo problema vengono utilizzati i layout cornerMazes; questi contengono 4 cibi, uno in ogni angolo del labirinto e Pac-Man, attraverso gli algoritmi di ricerca, deve essere in grado di trovare il percorso più breve attraverso il labirinto che tocchi tutti e quattro gli angoli. La rappresentazione degli stati scelta per questo problema è la seguente:
+						</p>
+							<pre>
+<em>(posizione corrente di Pac-Man, angoli già visitati)</em>
+</pre>
+						<p>
+							Tale rappresentazione è nata dopo lo studio attento dei problemi già implementati all’interno del file <code>searchAgents.py</code> ed utilizza le sole parti del <code>GameState</code> che sono necessarie, come indicatoci dalla consegna (sebbene ciò comporti allo stato di “ricordarsi” degli angoli visitati in precedenza). Quindi lo stato iniziale è <em>(posizione iniziale di Pac-Man, angoli visitati)</em>, dove in <em>angoli visitati</em> ci sarà la posizione iniziale di Pac-Man se questa è un angolo, altrimenti è vuoto.
+						</p>
+<pre>self.statoIniziale = (self.startingPosition, angoliVisitati)</pre>
+						<p>
+							Il controllo per lo stato goal consiste nel confrontare l’insieme degli angoli del problema con l’insieme degli angoli visitati. Se i due insiemi sono uguali, allora lo stato è uno stato goal.
+						</p>
+							<pre>
+def isGoalState(self, state):     
+    return set(state[1]) == set(self.corners)</pre>
+    					<p>
+							La funzione sucessore, invece, ritorna gli stati sucessori come un insieme di triple (così come indicatoci nella consegna); ciascuna tripla è composta da:
+							<ul>
+								<li>
+									prossimo stato
+								</li>
+								<li>
+									l’azione fatta da Pac-Man per raggiungere quello stato, ovvero il punto cardinale verso cui si è mosso
+								</li>
+								<li>
+									il costo dell’azione per raggiungere quello stato (che è 1)
+								</li>
+							</ul>
+							Ciascuna tripla è costruita come segue:
+							<ol>
+								<li>
+									a partire dalla posizione corrente di Pac-Man, si calcola la nuova posizione in cui Pac-Man sarebbe se si spostasse di una cella seguendo uno dei quattro punti cardinali.
+								</li>
+								<li>
+									se tale nuova posizione è valida (ovvero non è un muro), allora si costruisce la tripla descritta sopra, aggiornando l’insieme degli angoli visitati per il prossimo stato se la nuova posizione è un angolo non ancora visitato.
+								</li>
+								<li>
+									si ripetono queste operazioni per ciascun punto cardinale.
+								</li>
+							</ol>
+						</p>
+							<pre>
+def getSuccessors(self, state):
+    successors = []
+    for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
+         x,y = state[0]
+         dx, dy = Actions.directionToVector(action)
+         prossimaPosizione = nextx, nexty = int(x + dx), int(y + dy)
+         hitsWall = self.walls[nextx][nexty]
+
+         if not hitsWall:
+             angoliVisitati = set(state[1])
+             if prossimaPosizione in self.corners and prossimaPosizione not in angoliVisitati:
+                 angoliVisitati.add(prossimaPosizione)
+             prossimoStato = (prossimaPosizione, angoliVisitati)
+             costoAzione = self.costFn(prossimoStato)
+             successors.append( (prossimoStato , action, costoAzione) )             
+    
+    self._expanded += 1
+    return successors</pre>
+    					<p>
+							Tale problema è implementato nel file <code>searchAgents.py</code>, nella classe <code>CornersProblem</code>, seguendo la struttura e le firme dei metodi a disposizione. Le funzioni che sono state da noi implementate sono il costruttore, <code>getStartState</code>, <code>isGoalState</code>, <code>getSuccessors</code>.
+						</p>
+						<h3>Euristica</h3>
+						<p>
+							Al fine di poter risolvere il problema utilizzando l’algoritmo A*, si è provveduto a definire e implementare un'euristica ammissibile (come richiestoci dalla consegna).
+		   	L’euristica scelta si comporta come segue:
+							<ol>
+								<li>
+									Tra gli angoli che Pac-Man non ha ancora visitato, si sceglie quello più vicino alla posizione corrente di Pac-Man e si memorizza la distanza.
+								</li>
+								<li>
+									Dopo di che si sceglie l’angolo più vicino (non ancora visitato) all’angolo scelto al punto 1 e si somma la distanza tra questi due angoli a quella memorizzata al punto 1.
+								</li>
+								<li>
+									Per ciascun angolo non ancora visitato, si sceglie quello più vicino rispetto all’angolo considerato subito prima e si sommano le distanze tra queste coppie di angoli.
+								</li>
+								<li>
+									La somma tra le distanze è ritornata
+								</li>
+							</ol>
+							Tale euristica è ammissibile in quanto si tratta della soluzione del problema rilassato in cui Pac-Man si trova in un labirinto senza muri. È soluzione in quanto Pac-Man, dopo aver raggiunto l’angolo più vicino alla sua posizione iniziale segue il perimetro per poter visitare tutti gli altri angoli.
+						</p>
+						<pre>def cornersHeuristic(state, problem):
+    prossimoAng, distanza = prossimoAngolo(state, problem, manhattanDistance)
+    if prossimoAng != None:
+        return distanza + cornersHeuristic(prossimoAng, problem)
+    return 0
+    
+    
+def prossimoAngolo(state, problem, distanceFunction):
+    posizioneCorrente, angoliVisitati = state
+    angoliNonVisitati = set(problem.corners) - angoliVisitati
+    distProssimoAng = sys.maxint
+    prossimoAng = None
+    for angolo in angoliNonVisitati:
+        #problem.goal = angolo
+        distanza = distanceFunction(posizioneCorrente, angolo)
+        if distanza &lt; distProssimoAng:
+            distProssimoAng = distanza
+            prossimoAng = (angolo, angoliVisitati.union(set((angolo,))))
+    return (prossimoAng, distProssimoAng)
+    </pre>
+						<h3>Test</h3>
+						<p>
+							Al fine di verificare se la nostra rappresentazione degli stati era corretta, abbiamo seguito il test proposto nella consegna. Tale consiste nell’ eseguire i due comandi sottostanti; la rappresentazione del problema doveva far si che l’agente riuscisse a risolvere con successo i due problemi lanciati.
+						</p>
+						<pre>
+python pacman.py -l tinyCorners -p SearchAgent –a fn=bfs,prob=CornersProblem
+python pacman.py -l mediumCorners -p SearchAgent -a fn=bfs,prob=CornersProblem </pre>
+						<p>											
+						La nostra rappresentazione risolve correttamente i due problemi.<br />
+						L’euristica invece è stata testata utilizzando tre tipi di distanze: la disanza di Manhattan, la distanza euclidea e la distanza di Chebyshev. Il confronto tra i dati ottenuti ci sottolinea come la distanza Manhattan sia dominante nei confronti delle altre due, mentre la distanza euclidea è dominante solo sulla distanza di Chebyshev.
+						<br />
+						I dati ottenuti con il layout <code>mediumCorners</code> sono i seguenti:
+						<table class="table">
+							<thead>
+								<tr>
+								﻿  ﻿ <th>Euristica</th>
+								﻿  ﻿ <th>Tempo impiegato (s)</th>
+								﻿  ﻿ <th>Nodi espansi</th>
+								﻿  ﻿ <th>Costo percorso</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+								﻿  ﻿ <td>Manhattan Distance</td>
+								﻿  ﻿ <td>0.1</td>
+								﻿  ﻿ <td>106</td>
+								﻿  ﻿ <td>755</td>
+								</tr>
+								<tr>
+								﻿  ﻿ <td>Euclidean Distance</td>
+								﻿  ﻿ <td>0.1</td>
+								﻿  ﻿ <td>106</td>
+								﻿  ﻿ <td>818</td>
+								</tr>
+								<tr>
+								﻿  ﻿ <td>Chebyshev Distance</td>
+								﻿  ﻿ <td>0.2</td>
+								﻿  ﻿ <td>106</td>
+								﻿  ﻿ <td>888</td>
+								</tr>
+							</tbody>
+						</table>
+						I dati ottenuti con il layout <code>bigCorners</code> sono i seguenti:
+						<table class="table">
+							<thead>
+								<tr>
+								﻿  ﻿ <th>Euristica</th>
+								﻿  ﻿ <th>Tempo impiegato (s)</th>
+								﻿  ﻿ <th>Nodi espansi</th>
+								﻿  ﻿ <th>Costo percorso</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+								﻿  ﻿ <td>Manhattan Distance</td>
+								﻿  ﻿ <td>0.4</td>
+								﻿  ﻿ <td>162</td>
+								﻿  ﻿ <td>1813</td>
+								</tr>
+								<tr>
+								﻿  ﻿ <td>Euclidean Distance</td>
+								﻿  ﻿ <td>0.5</td>
+								﻿  ﻿ <td>162</td>
+								﻿  ﻿ <td>2044</td>
+								</tr>
+								<tr>
+								﻿  ﻿ <td>Chebyshev Distance</td>
+								﻿  ﻿ <td>0.6</td>
+								﻿  ﻿ <td>162</td>
+								﻿  ﻿ <td>2296</td>
+								</tr>
+							</tbody>
+						</table>
+						<br />
+						Per risolvere il problema degli angoli con A* e la nostra euristica è sufficiente eseguire questo comando:
+						<pre>python pacman.py -l mediumCorners -p AStarCornersAgent -z 0.5</pre>
+					</div>
+					<div id="cibo">
+						<h2>Mangiare Tutto il Cibo</h2>
+						<div class="img text-center">
+							<img class="img-polaroid" src="img/p3.jpg"/>
+						</div>
+						<p>
+							Quest'ultimo problema richiede di far mangiare a Pac-Man tutto il cibo presente nel labirinto nel minor numero di passi possibile. La quantità e la disposizione del cibo sono casuali. Il problema è codificato nella classe <code>FoodSearchProblem</code> del file <code>searchAgents.py</code>. Uno stato del grafo di ricerca è rappresentato dalla coppia:
+						</p>
+							<pre>
+<em>(posizione di Pac-Man, griglia del cibo)</em>								
+</pre>
+						<p> dove la <em>griglia del cibo</em> è un array a 2 dimensioni di booleani rappresentante il labirinto, in cui un singolo elemento è a true se in quella posizione (x,y) è presente del cibo. La richiesta è pertanto quella di costruire un'euristica ammissibile e consistente per l'algoritmo A* che riesca a trovare la soluzione ottima.
+						</p>
+						<p>
+							La nostra idea inizialmente è stata quella di usare un'euristica simile a quella del problema precedente, che memorizzasse cioè di volta in volta la distanza minore tra Pac-Man ed ogni cibo rimanente e sommasse queste distanze. Purtroppo un'euristica di questo tipo non è ammissibile per questo problema perchè ad esempio nel seguente layout cercherebbe prima di mangiare il cibo più vicino subito sulla destra, poi tornerebbe a sinistra e infine mangerebbe l'ultimo cibo in fondo a destra, sovrastimando così il costo della soluzione ottima (che consiste invece nel raggiungere prima l'angolo di sinistra e poi quello di destra).
+						</p>
+						<div class="img text-center">
+							<img class="img-polaroid" src="img/fail.jpg" />
+						</div>
+						<p>
+							Un'euristica più semplice ma che espande molti più nodi potrebbe essere quella del "nearest neighbor", che considera in ogni stato la distanza al cibo più vicino. La lentezza dell'euristica tuttavia può essere risolta sommando a questo fattore la distanza tra i due cibi più distanti rimasti nel labirinto. Quest'euristica è ammissibile e consistente e riesce a trovare la soluzione ottima nel layout <code>trickySearch</code> espandendo relativamente pochi nodi. Eseguendo infatti il comando
+						</p>
+						<pre>
+python pacman.py -l trickySearch -p AStarFoodSearchAgent</pre>
+						<p>
+							otteniamo la soluzione ottima di costo 60 con 8111 nodi espansi ed un tempo di 12.3 secondi.
+						</p>
+						<h3>Dimostrazione</h3>
+						<p>
+							Vediamo ora perchè l'euristica è consistente. Definiamo:
+						</p>
+						<pre>
+D = massima distanza di Manhattan tra i due cibi più distanti nel labirinto (detti estremi)
+d = distanza di Manhattan tra Pac-Man e il cibo a lui più vicino</pre>
+						<p>
+							Sia inoltre n uno stato, n' un suo successore. Allora si ha:</p>
+						<pre>
+h(n) = D + d
+h(n') = D' + d'</pre>
+						<p>
+							La condizione di consistenza afferma che:
+						</p>
+						<pre>h(n) &le; h(n') + c(n, a, n')</pre>
+						<p>
+							Poichè sappiamo che il costo di un passo <code>c(n, a, n')</code> nel labirinto è sempre 1, la condizione diventa:
+						</p>
+						<pre>D + d &le; D' + d' + 1</pre>
+						<p>
+							Ciascun cibo è disposto nella griglia nel momento della definizione del problema e durante la ricerca non ne possono essere aggiunti. Pertanto durante tutta l'esecuzione dell'algoritmo vale:
+						</p>
+						<pre>D &ge; D'</pre>
+						<p>
+							Dopo che Pac-Man ha effettuato un movimento possono essere vere due condizioni esclusive: <code>D = D'</code> oppure <code>D &gt; D'</code>.
+						</p>
+						<h4>Caso 1: D = D'</h4>
+						<p>
+							Il fatto che D resti invariato, implica che Pac-Man non abbia mangiato nessuno dei cibi "estremi" e che i cibi più vicini a lui non siano "estremi". Pac-Man può quindi trovarsi in due stati:
+							<dl>
+								<dt>
+									Pac-Man si è avvicinato al cibo a lui più vicino (senza mangiarlo):
+								</dt>
+								<dd>
+									A causa del fatto che Pac-Man si sposta sempre di 1 solo passo, vale che <code>d' = d - 1</code>. Possiamo quindi così riscrivere la condizione di consistenza: 									
+									<pre>
+D + d &le; D + d - 1 + 1, semplificando
+D + d &le; D + d</pre>
+									che è sempre vera.
+
+								</dd>
+								<dt>
+									Pac-Man ha mangiato il cibo a lui più vicino:
+								</dt>
+								<dd>
+									In questo caso, nello stato n, Pac-Man è a distanza 1 dal cibo più vicino (<code>d = 1</code>). Il nuovo cibo più vicino sarà almeno a distanza 1 da Pac-Man (<code>d' &ge; 1</code>). La relazione di consistenza diventa quindi:
+									<pre>
+D + 1 &le; D + d' + 1, semplificando
+0 &le; d'</pre>
+									che anche in questo caso è sempre vera.
+								</dd>
+							</dl>
+						</p>
+						<h4>Caso 2: D &gt; D'</h4>
+						<p>
+							In questo caso Pac-Man ha mangiato uno degli "estremi" nello stato n', e questo fa diventare la distanza tra i due nuovi "estremi" minore di quella precedente. Vale <code>d = 1</code> perchè nello stato n, prima che venisse mangiato l'estremo, Pac-Man si trovava a distanza 1 da esso. Inoltre consideriamo la figura sottostante che consiste nell'area semplificata di un labirinto senza i muri interni e in cui i punti rossi corrispondono al cibo. E` sempre vero che <code>d' &ge; D - D'</code> perchè nell'area azzurra non potrà essere rimasto del cibo, altrimenti D' non sarebbe la nuova massima distanza tra i due cibi "estremi". Il cibo più vicino a Pac-Man nello stato n', dovrà quindi essere contenuto nell'area arancione.
+						</p>
+						<div class="img text-center">
+							<img class="img-polaroid" src="img/dimostrazione.jpg" />
+						</div>
+						<p>
+							Quest'ultima disequazione può essere riscritta come:
+						</p>
+						<pre>d' = D - D' + h, con h &ge; 0 </pre>
+						<p>La condizione di consistenza diventa quindi:</p>
+						<pre>
+D + 1 &le; D' + D - D' + h + 1, semplificando
+0 &le; h</pre>
+						<p>
+che è sempre vera. Pertanto la condizione di consistenza è verificata in ogni caso. Poichè l'euristica è consistente, è anche ammissibile e questo garantisce l'ottimalità della soluzione trovata. La codifica scelta dell'euristica è quindi la seguente:
+						</p>
+						<pre>
+def foodHeuristic(state, problem):
+    return calculateHeuristic(state, problem, manhattanDistance)</pre>
+						<pre>
+def calculateHeuristic(state, problem, distance):
+  position, foodGrid = state
+  foodList = foodGrid.asList()
+  maxDistanzaCibi = 0
+  minDistanzaCiboPacman = 0
+  
+  #calcolo maxDistanzaCibi
+  for cibo1 in foodList:
+     for cibo2 in foodList:
+       #se il valore è già presente nelle info aggiorno maxDistanzaCibi
+       if (cibo1, cibo2) in problem.heuristicInfo:
+            if maxDistanzaCibi &lt; problem.heuristicInfo[(cibo1, cibo2)]:
+                maxDistanzaCibi = problem.heuristicInfo[(cibo1, cibo2)]
+       elif (cibo2, cibo1) in problem.heuristicInfo:
+             if maxDistanzaCibi &lt; problem.heuristicInfo[(cibo2, cibo1)]:
+                maxDistanzaCibi = problem.heuristicInfo[(cibo2, cibo1)]
+       else: #se non è nelle info, lo calcolo e lo aggiungo
+            problem.heuristicInfo[(cibo1, cibo2)] = distance(cibo1, cibo2, problem.startingGameState)
+            if maxDistanzaCibi &lt; problem.heuristicInfo[(cibo1, cibo2)]:
+                maxDistanzaCibi = problem.heuristicInfo[(cibo1, cibo2)]
+
+  #calcolo minDistanzaCiboPacman
+  #i controlli minDistanzaCiboPacman == 0 riducono drastiucamente il numero di nodi espansi
+  for cibo in foodList:
+      #se c'è un valore corrispondente nelle info
+      if (cibo, position) in problem.heuristicInfo:
+          if minDistanzaCiboPacman == 0 or minDistanzaCiboPacman > problem.heuristicInfo[(cibo, position)]:
+                minDistanzaCiboPacman = problem.heuristicInfo[(cibo, position)]
+      elif (position, cibo) in problem.heuristicInfo:
+          if minDistanzaCiboPacman == 0 or minDistanzaCiboPacman > problem.heuristicInfo[(position, cibo)]:
+                minDistanzaCiboPacman = problem.heuristicInfo[(position, cibo)]
+      else: #se non c'è un valore associato alla cella, lo calcolo e lo inserisco nelle info
+          problem.heuristicInfo[(position, cibo)] = distance(position, cibo, problem.startingGameState)
+          if minDistanzaCiboPacman == 0 or minDistanzaCiboPacman > problem.heuristicInfo[(position, cibo)]:
+                minDistanzaCiboPacman = problem.heuristicInfo[(position, cibo)]
+          
+  return maxDistanzaCibi + minDistanzaCiboPacman</pre>
+						<p>
+							L'implementazione del problema fornita comprende anche un metodo <code>mazeDistance</code> che, dati due punti, ritorna la distanza tra di essi calcolata effettuando una ricerca BFS. Utilizzando questa euristica invece della distanza di Manhattan si ottengono risultati notevolmente migliori, infatti otteniamo la soluzione ottima di costo 60 con 726 nodi espansi ed un tempo di 10.9 secondi. Tuttavia non abbiamo approfondito questo tema in quanto vengono utilizzati i database di pattern, argomento non trattato a lezione.  
+						</p>
+					</div>
+					<div id="conclusioni">
+						<h2>Conclusioni</h2>
+						<p>Dalle fasi di progettazione e realizzazione dei test abbiamo compreso la centralità di determinati problemi. E' stato essenziale scegliere le migliori strutture dati da utilizzare nell'implementazione degli algoritmi di ricerca, prima, della struttura dei problemi, poi.
+Altrettanto importante, se non fondamentale, è stata la scelta della rappresentazione degli stati dei problemi che la consegna ci proponeva, e delle loro euristiche. 
+<br /> Le nostre soluzioni hanno portato a risultati in linea con quanto ci aspettavamo e che rispettano non solo la consegna ma anche i fondamenti teorici che vi sono alla base.
+Le nostre soluzioni potranno essere ulteriormente revisionate e migliorate in futuro e, come possibili estensioni, sarà possibile realizzare anche le sucessive parti del problema, che trattano ulteriori argomenti di intelligenza artificiale al fine di avere l'intero gioco automatizzato.</p>
+					</div>
+				</div>
+			</div>﻿
+		</div>
+	</body>
+	
+	<script src="js/jquery.js"></script>
+    <script src="js/bootstrap-affix.js"></script>
+    <script src="js/bootstrap-scrollspy.js"></script>
+    <script src="js/application.js"></script>
+</html>

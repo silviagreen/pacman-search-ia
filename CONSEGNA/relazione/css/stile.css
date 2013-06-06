@@ -1,0 +1,31 @@
+.titolo {
+    text-align: center;
+	width: 100%;
+}
+.titolo h1 {
+    font-size: 60px;
+    line-height: 1;
+
+}
+.lead {
+	font-size: 18px;
+	font-style: italic;
+	line-height: 1;
+}
+.nomi {
+	margin-top:10px;
+	font-weight: bold;
+}
+.container {
+	text-align:justify;
+}
+.row-fluid {
+	width: 1170px;
+	margin: auto;
+}
+.img {
+	margin:5px;
+}
+.bs-docs-sidebar{
+	text-align:left;
+}
