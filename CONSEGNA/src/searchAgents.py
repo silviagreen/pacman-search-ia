@@ -369,7 +369,7 @@ def prossimoAngolo(state, problem, distanceFunction):
     return (prossimoAng, distProssimoAng)
 
 #usando Manhattan Distance
-def cornersHeuristic_0(state, problem):
+def cornersHeuristic(state, problem):
     """
       A heuristic for the CornersProblem that you defined.
       
@@ -400,12 +400,11 @@ def cornersHeuristic_1(state, problem):
     return 0
 
 #usando Chebyshev Distance
-def cornersHeuristic(state, problem):
+def cornersHeuristic_2(state, problem):
     prossimoAng, distanza = prossimoAngolo(state, problem, chebyshevDistance)
     if prossimoAng != None:
         return distanza + cornersHeuristic(prossimoAng, problem)
     return 0
-
 
 class AStarCornersAgent(SearchAgent):
   "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
@@ -511,13 +510,12 @@ def calculateHeuristic(state, problem, distance):
                 minDistanzaCiboPacman = problem.heuristicInfo[(position, cibo)]
           
   return maxDistanzaCibi + minDistanzaCiboPacman
-          
-def foodHeuristic_0(state, problem):
-    return calculateHeuristic(state, problem, manhattanDistance)
               
 def foodHeuristic(state, problem):
-    return calculateHeuristic(state, problem, mazeDistance)
+    return calculateHeuristic(state, problem, manhattanDistance)
 
+def foodHeuristic_1(state, problem):
+    return calculateHeuristic(state, problem, mazeDistance)
   
 class ClosestDotSearchAgent(SearchAgent):
   "Search for all food using a sequence of searches"
