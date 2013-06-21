@@ -68,7 +68,7 @@ def tinyMazeSearch(problem):
   Returns a sequence of moves that solves tinyMaze.  For any other
   maze, the sequence of moves will be incorrect, so only use this for tinyMaze
   """
-  return  [s,s,w,s,w,w,n,s,w]
+  return  [s,s,w,s,w,w,n,s,s,w]
   
 def nullHeuristic(state, problem=None):
   """
