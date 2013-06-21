@@ -25,7 +25,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="span3 bs-docs-sidebar">
-					<ul data-spy="affix" data-offset-top="300" data-offset-bottom="0" class="nav nav-list bs-docs-sidenav affix-top">﻿
+					<ul class="nav nav-list bs-docs-sidenav affix-top">﻿
 						<li>
 							<a href="#introduzione"> <i class="icon-chevron-right"></i> Introduzione </a>
 						</li>
@@ -169,7 +169,7 @@
 							<img class="img-polaroid" src="img/p1.jpg"/>
 						</div>
 						<p>
-							Il primo problema preso in considerazione consiste nel far raggiungere a Pac-Man un punto fissato all’interno del labirinto tramite diversi algoritmi di ricerca visti a lezione, nello specifico: depth-first, breadth-first, costo uniforme e A*.La rappresentazione dei nodi nel grafo di ricerca è data dalla funzione <code>getSuccessors</code> della classe	<code>PositionSearchProblem</code>. Un nodo è rappresentato dalle coordinate x e y nel labirinto, dall'insieme di azioni e dal costo complessivo per arrivare a quello stato. Si è deciso di implementare innanzitutto una funzione di ricerca generica che utilizzasse come frontiera una lista astratta, istanziata a seconda del caso specifico come una pila, una coda, o una coda con priorità.<!--change--> Questa funzione deve ritornare una lista di azioni che conducono l'agente dallo stato iniziale al goal.<!--end change--> La <code>genericSearch</code> è quindi definita come segue:
+							Il primo problema preso in considerazione consiste nel far raggiungere a Pac-Man un punto fissato all’interno del labirinto tramite diversi algoritmi di ricerca visti a lezione, nello specifico: depth-first, breadth-first, costo uniforme e A*. La rappresentazione dei nodi nel grafo di ricerca è data dalla funzione <code>getSuccessors</code> della classe	<code>PositionSearchProblem</code>. Un nodo è rappresentato dalle coordinate x e y nel labirinto, dall'insieme di azioni e dal costo complessivo per arrivare a quello stato. Si è deciso di implementare innanzitutto una funzione di ricerca generica che utilizzasse come frontiera una lista astratta, istanziata a seconda del caso specifico come una pila, una coda, o una coda con priorità. Questa funzione deve ritornare una lista di azioni che conducono l'agente dallo stato iniziale al goal. La <code>genericSearch</code> è quindi definita come segue:
 						</p>
 						<pre>
 ﻿def genericSearch(problem, frontiera, euristica=nullHeuristic):
@@ -711,10 +711,10 @@ def calculateHeuristic(state, problem, distance):
 					</div>
 					<div id="conclusioni">
 						<h2>Conclusioni</h2>
-						<p>Dalle fasi di progettazione e realizzazione dei test abbiamo compreso la centralità di determinati problemi. In primo luogo è stato essenziale scegliere le migliori strutture dati da utilizzare nell'implementazione degli algoritmi di ricerca prima, della struttura dei problemi poi.
-Altrettanto importante, nonchè essenziale, è stata la scelta della rappresentazione degli stati dei problemi che la consegna ci proponeva, e delle loro euristiche. 
+						<p>Dalle fasi di progettazione e realizzazione dei test abbiamo compreso la centralità di determinati problemi. E' stato essenziale scegliere le migliori strutture dati da utilizzare nell'implementazione degli algoritmi di ricerca, prima, della struttura dei problemi, poi.
+Altrettanto importante, se non fondamentale, è stata la scelta della rappresentazione degli stati dei problemi che la consegna ci proponeva, e delle loro euristiche.	
 <br /> Le nostre soluzioni hanno portato a risultati in linea con quanto ci aspettavamo e che rispettano non solo la consegna ma anche i fondamenti teorici che vi sono alla base.
-Le nostre soluzioni potranno essere ulteriormente revisionate e migliorate in futuro e, come possibilli estensioni, sarà possibile realizzare anche le successive parti del problema, che trattano ulteriori argomenti di intelligenza artificiale al fine di avere l'intero gioco automatizzato</p>
+Le nostre soluzioni potranno essere ulteriormente revisionate e migliorate in futuro e, come possibili estensioni, sarà possibile realizzare anche le sucessive parti del problema, che trattano ulteriori argomenti di intelligenza artificiale al fine di avere l'intero gioco automatizzato.</p>
 					</div>
 				</div>
 			</div>﻿
@@ -722,8 +722,8 @@ Le nostre soluzioni potranno essere ulteriormente revisionate e migliorate in fu
 	</body>
 	
 	<script src="js/jquery.js"></script>
-	<script src="js/bootstrap-scrollspy.js"></script>
     <script src="js/bootstrap-affix.js"></script>
-    
+    <script src="js/bootstrap-scrollspy.js"></script>
+    <script src="js/application.js"></script>
     
 </html>
